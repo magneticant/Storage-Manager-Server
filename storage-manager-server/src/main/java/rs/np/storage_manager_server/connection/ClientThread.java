@@ -11,23 +11,49 @@ import rs.np.storage_manager_server.controller.Controller;
 import java.net.Socket;
 import java.util.List;
 /**
- *
+ * Predstavlja serversku klasu gde se izvrsava nit svakog klijenta na serveru.
+ * 
+ * 
  * @author Milan
  */
 class ClientThread extends Thread {
+	/**
+	 * Privatni atribut socket koji predstavlja soket za rad sa klijentom.
+	 */
     private Socket socket;
+    /**
+     * Privatni atribut sender iz common jar-a koji sadrzi mehanizam za slanje "upakovanih" podataka (odgovora) klijentu.
+     */
     private Sender sender;
+    /**
+     * Privatni atribut sender iz common jar-a koji sadrzi mehanizam za prijem "upakovanih" podataka (odgovora) od klijenta.
+     */
     private Receiever receiver;
+    /**
+     * Privatni atribut domenske klase user.
+     */
     private User user;
+    /**
+     * Privatni atribut Server klase koja sadrzi metode za uspostavljanje konekcije i rad sa nitima klijenata.
+     */
     private Server server;
-    
+    /**
+     * Parametrizovani konstruktor klase ClientThread.
+     * 
+     * @param socket sluzi za inicijalizaciju soket-a za komunikaciju sa klijentom
+     * @param server sluzi za inicijalizaciju server atributa klase, za rad sa nitima klijenta.
+     */
     public ClientThread(Socket socket, Server server) {
         this.socket = socket;
         sender = new Sender(socket);
         receiver = new Receiever(socket);
         this.server = server;
     }
-
+    /**
+     * Glavna run metoda ove klase (Override-ovana iz klase Thread) 
+     * koja sluzi za prijem i razresavanje zahteva klijenata i prosledjivanje 
+     * tih zahteva kontroleru.
+     */
     @Override
     public void run() {
         while(true){
@@ -177,31 +203,61 @@ class ClientThread extends Thread {
             }
         }
     }
-    
+    /**
+     * get metoda za soket za komunikaciju.
+     * 
+     * @return socket tipa Socket.
+     */
     public Socket getSocket() {
         return socket;
     }
-
+    /**
+     * get metoda za korisnika (klijenta)
+     * 
+     * @return klijent tipa Client
+     */
     public User getUser() {
         return user;
     }
-
+    /**
+     * get metoda za posiljaoca (sender)
+     * @return posiljalac (domenska klasa common projekta) kao tip Sender
+     */
     public Sender getSender() {
         return sender;
     }
-
+    /**
+     * set metoda za posiljaoca (sender)
+     * @param sender posiljalac tipa Sender
+     */
     public void setSender(Sender sender) {
         this.sender = sender;
     }
-
+    /**
+     * get metoda za primaoca (receiver)
+     * 
+     * @return receiver primalac tipa Receiver
+     */
     public Receiever getReceiver() {
         return receiver;
     }
-
+    /**
+     * set metoda za primaoca (receiver)
+     * 
+     * @param receiver primalac kao tip Receiver
+     */
     public void setReceiver(Receiever receiver) {
         this.receiver = receiver;
     }
-
+    /**
+     * Metoda koja proverava login status korisnika koji pokusava da se prijavi.
+     * Ona otklanja sve korisnike koji imaju prazan username ili password ili koji su vec
+     * prijavljeni na sistem.
+     * 
+     * @param user koji se prijavljuje na sistem (param tipa User)
+     * 
+     * @throws Exception ako je uneti korisnik null.
+     */
     private void checkForLoginStatus(User user) throws Exception {
         if(user == null) 
             throw new Exception("User cannot be null!");

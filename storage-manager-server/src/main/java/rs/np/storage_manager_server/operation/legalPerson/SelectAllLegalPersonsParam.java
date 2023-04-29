@@ -9,11 +9,16 @@ import rs.np.storage_manager_common.domain.abstraction.implementation.LegalPerso
 import rs.np.storage_manager_server.operation.GenericSystemOperation;
 
 /**
- *
+ * Klasa za prikupljanje podataka o svim pravnim licima, parametrizovano. Nasledjuje klasu 
+ * GenericSystemOperation.
+ * 
  * @author Milan
  */
 public class SelectAllLegalPersonsParam extends GenericSystemOperation {
-    private List<LegalPerson> legalPersons;
+	/**
+	 * privatni atribut legalPersons, tipa List<LegalPerson>, lista pravnih lica koje treba preuzeti iz baze podataka
+	 */
+	private List<LegalPerson> legalPersons;
     
     @Override
     protected void preconditions(Object parameter) throws Exception {
@@ -23,7 +28,11 @@ public class SelectAllLegalPersonsParam extends GenericSystemOperation {
     protected void executeOperation(Object parameter) throws Exception {
         legalPersons = repository.selectAll((LegalPerson)parameter);
     }
-
+    /**
+     * get metoda za pravna lica
+     * 
+     * @return legalPersons, kao List<LegalPerson> (ArrayList)
+     */
     public List<LegalPerson> getLegalPersons() {
         return legalPersons;
     }

@@ -7,30 +7,40 @@ import javax.swing.table.AbstractTableModel;
 import rs.np.storage_manager_common.domain.User;
 
 /**
- *
+ * Predstavlja table model klasu za ispis podataka o korisniku
+ * 
  * @author Milan
  */
 public class UserTableModel extends AbstractTableModel{
-
-    String[] columnNames = new String[]{"ID","name","last name","username", "password"};
+	/**
+	 * package scope niz naziva kolona tabele (columnNames) kao String[]
+	 */
+	String[] columnNames = new String[]{"ID","name","last name","username", "password"};
+	/**
+	 * package scope lista aktivnih korisnika programa, tipa List<User>
+	 */
     List<User> users;
-
+    /**
+     * parametrizovani konstruktor klase
+     *  
+     * @param users, tipa List<User>. Lista aktivnih korisnika programa (klijenata koji su prijavljeni)
+     */
     public UserTableModel(List<User> users) {
         this.users = users;
     }
-
+    
     @Override
     public String getColumnName(int column) {
     if(column>columnNames.length) return "n/a";
     return columnNames[column];
     }
-
+    /**
+     * Override metode isCellEditable iz AbstractTableModel klase. Nijedno polje nije izmenjivo
+     */
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
         return false;
     }
-    
-    
     
     @Override
     public int getRowCount() {
@@ -55,7 +65,11 @@ public class UserTableModel extends AbstractTableModel{
             default:return "n/a";
         }
     }
-
+    /**
+     * javna metoda za dodavanje korisnika u tabelu
+     * 
+     * @param u tipa User, korisnik za dodavanje u internu listu aktivnih korisnika
+     */
     public void addUser(User u){
         if(!users.contains(u)){
         users.add(u);

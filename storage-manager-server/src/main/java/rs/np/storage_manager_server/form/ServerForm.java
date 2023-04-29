@@ -12,13 +12,17 @@ import rs.np.storage_manager_common.domain.User;
 import rs.np.storage_manager_server.connection.Server;
 
 /**
- *
+ * JFrame klasa koja predstavlja glavnu formu servera.
  * @author Milan
  */
 public class ServerForm extends javax.swing.JFrame {
+	/**
+	 * privatni atribut server, predstavlja instancu klase Server sa metodama za rad sa klijentima
+	 */
 private Server server;
     /**
-     * Creates new form ServerForm
+     * Neparametrizovani konstruktor klase. Poziva initComponents, setExtendedState i 
+     * menja tekst dugmeta txtState na "Server is off"
      */
     public ServerForm() {
         initComponents();
@@ -142,7 +146,10 @@ private Server server;
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    /**
+     * Event handler za klik na dugme off. Gasi se server i zavrsava proces
+     * @param evt tipa java.awt.event.ActionEvent predstavlja klik na dugme btnOff
+     */
     private void btnOffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOffActionPerformed
         // TODO add your handling code here:
         if(server == null || server.getServerSocket()==null){
@@ -158,7 +165,11 @@ private Server server;
             }
         }
     }//GEN-LAST:event_btnOffActionPerformed
-
+    /**
+     * Event handler za klik na dugme on. Pokrece se server
+     * 
+     * @param evt tipa java.awt.event.ActionEvent, predstavlja klik na dugme on
+     */
     private void btnOnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOnActionPerformed
         // TODO add your handling code here:
         if(server == null || !server.isAlive()){
@@ -175,12 +186,18 @@ private Server server;
         }else
             JOptionPane.showMessageDialog(this, "Server is already turned on.");
     }//GEN-LAST:event_btnOnActionPerformed
-
+    /**
+     * Event handler za klik na meni opciju settings form. Otvara se nova forma za podesavanja
+     * @param evt tipa java.awt.event.ActionEvent, predstavalja klik na meni "Settings"
+     */
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
         new SettingsForm(this, true).setVisible(true);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
-
+    /**
+     * Event handler za klik na meni opciju "active users". Otvara se nova forma za prikaz tabele aktivnih korisnika
+     * @param evt tipa java.awt.event.ActionEvent, predstavalja klik na meni "Active users"
+     */
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         // TODO add your handling code here:
         try{
@@ -192,7 +209,10 @@ private Server server;
             Logger.getLogger(ServerForm.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jMenuItem2ActionPerformed
-
+    /**
+     * Event handler za klik na meni opciju "About". Otvara se novi prozor sa informacijama o serveru.
+     * @param evt tipa java.awt.event.ActionEvent, predstavalja klik na meni "About"
+     */
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         // TODO add your handling code here:
         JOptionPane.showMessageDialog(this, "WIP");

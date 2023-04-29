@@ -7,13 +7,21 @@ import rs.np.storage_manager_common.domain.User;
 import rs.np.storage_manager_server.form.model.UserTableModel;
 
 /**
- *
+ * JDialog klasa za prikaz aktivnih korisnika aplikacije
+ * 
  * @author Milan
  */
 public class ActiveUserForm extends javax.swing.JDialog {
+	/**
+	 * privatni atribut lista korisnika
+	 */
 private List<User> users;
     /**
-     * Creates new form ActiveUserForm
+     * Parametrizovani konstruktor
+     * 
+     * @param parent roditeljski Frame tipa java.awt.Frame
+     * @param modal tipa boolean, predstavlja opciju modalnosti prozora
+     * @param users korisnici ovog programa, tipa List<User>
      */
     public ActiveUserForm(java.awt.Frame parent, boolean modal, List<User> users) {
         super(parent, modal);
@@ -92,7 +100,11 @@ private List<User> users;
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    /**
+     * Event handler za klik na dugme cancel. Zatvara se forma
+     * 
+     * @param evt tipa java.awt.event.ActionEvent, dogadjaj klika na dugme
+     */
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         // TODO add your handling code here:
         dispose();
@@ -106,6 +118,9 @@ private List<User> users;
     private javax.swing.JLabel lblInfo;
     // End of variables declaration//GEN-END:variables
 
+    /**
+     * privatna metoda pripreme forme za rad sa korisnikom. Dodeljuje tabeli odgovarajuci model
+     */
     private void prepareForm() {
         UserTableModel model = new UserTableModel(users);
         jTable1.setModel(model);
