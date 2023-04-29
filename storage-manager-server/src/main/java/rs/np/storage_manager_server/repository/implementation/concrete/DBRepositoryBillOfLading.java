@@ -16,11 +16,12 @@ import rs.np.storage_manager_server.repository.DBBroker;
 import rs.np.storage_manager_server.repository.DBRepository;
 
 /**
- *
+ * Klasa koja predstavlja repozitorijum za otpremnicu, implementira interfejs DBRepository 
+ * i prosledjuje BillOfLading kao genericki parametar
  * @author Milan
  */
 public class DBRepositoryBillOfLading implements DBRepository<BillOfLading>{
-
+	
     @Override
     public List<BillOfLading> selectAll(BillOfLading parameter) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
