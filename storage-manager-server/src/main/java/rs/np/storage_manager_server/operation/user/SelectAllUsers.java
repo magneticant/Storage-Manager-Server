@@ -7,11 +7,16 @@ import rs.np.storage_manager_common.domain.User;
 import rs.np.storage_manager_server.operation.GenericSystemOperation;
 
 /**
- *
+ * Klasa za prikupljanje podataka o svim korisnicima. Nasledjuje klasu 
+ * GenericSystemOperation.
+ * 
  * @author Milan
  */
 public class SelectAllUsers extends GenericSystemOperation{
-private List<User> users;
+	/**
+	 * privatni atribut users, tipa List<User>, lista korisnika koje treba preuzeti iz baze podataka
+	 */
+	private List<User> users;
 
     @Override
     protected void preconditions(Object parameter) throws Exception {}
@@ -20,7 +25,11 @@ private List<User> users;
     protected void executeOperation(Object parameter) throws Exception {
         users = repository.selectAll();
     }
-
+    /**
+     * get metoda za korisnike
+     * 
+     * @return users, kao List<User> (ArrayList)
+     */
     public List<User> getUsers() {
         return users;
     }
