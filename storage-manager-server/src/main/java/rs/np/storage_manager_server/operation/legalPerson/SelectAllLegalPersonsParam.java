@@ -9,7 +9,7 @@ import rs.np.storage_manager_common.domain.abstraction.implementation.LegalPerso
 import rs.np.storage_manager_server.operation.GenericSystemOperation;
 
 /**
- * Klasa za prikupljanje podataka o svim pravnim licima, parametrizovano. Nasledjuje klasu 
+ * Klasa za prikupljanje podataka o svim pravnim licima, parametrizovano, po nazivu. Nasledjuje klasu 
  * GenericSystemOperation.
  * 
  * @author Milan
