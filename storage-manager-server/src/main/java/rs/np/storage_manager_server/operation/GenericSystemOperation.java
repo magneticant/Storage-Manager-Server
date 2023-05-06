@@ -22,7 +22,8 @@ public abstract class GenericSystemOperation {
 	 */
     protected final Repository repository;
     /**
-     * neparametrizovani konstruktor klase. Postavlja dependency repozitorijuma (vidi: repository)
+     * neparametrizovani konstruktor klase. Postavlja dependency repozitorijuma 
+     * (vidi: {@link rs.np.storage_manager_server.repository.Repository} )
      */
     public GenericSystemOperation() {
         this.repository = (Repository) new AbstractDBRepository();
@@ -31,7 +32,7 @@ public abstract class GenericSystemOperation {
      * template method za rad sa jednom transakcijom. Poziva apstraktne metode preconditions,
      * startTransaction, executeOperation i commit
      * 
-     * @param parameter tipa Object. Predstavlja objekat koji se perzistira
+     * @param parameter tipa {@link Object}. Predstavlja objekat koji se perzistira
      * @throws Exception u slucaju greske prilikom transakcije (izvrsen rollback)
      */
     public final void execute(Object parameter) throws Exception{
@@ -51,7 +52,7 @@ public abstract class GenericSystemOperation {
     } 
     /**
      * zasticena (protected scope) apstraktna metoda preconditions koja predstavlja preduslove za izvrsenje S.O.
-     * @param parameter tipa Object, predstavlja objekat koji se perzistira
+     * @param parameter tipa {@link Object}, predstavlja objekat koji se perzistira
      * @throws Exception u slucaju greske prilikom transakcije (izvrsen rollback)
      */
     protected abstract void preconditions(Object parameter) throws Exception;
@@ -64,7 +65,7 @@ public abstract class GenericSystemOperation {
     }
     /**
      * zasticena (protected scope) apstraktna metoda preconditions koja predstavlja izvrsenje S.O.
-     * @param parameter tipa Object, predstavlja objekat koji se perzistira
+     * @param parameter tipa {@link Object}, predstavlja objekat koji se perzistira
      * @throws Exception u slucaju greske prilikom transakcije (izvrsen rollback)
      */
     protected abstract void executeOperation(Object parameter) throws Exception;

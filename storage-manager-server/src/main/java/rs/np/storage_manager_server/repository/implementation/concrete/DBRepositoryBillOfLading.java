@@ -17,7 +17,7 @@ import rs.np.storage_manager_server.repository.DBRepository;
 
 /**
  * Klasa koja predstavlja repozitorijum za otpremnicu, implementira interfejs DBRepository 
- * i prosledjuje BillOfLading kao genericki parametar
+ * i prosledjuje {@link BillOfLading} kao genericki parametar
  * @author Milan
  */
 public class DBRepositoryBillOfLading implements DBRepository<BillOfLading>{

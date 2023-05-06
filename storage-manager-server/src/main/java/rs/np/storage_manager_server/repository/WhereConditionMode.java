@@ -7,10 +7,16 @@ package rs.np.storage_manager_server.repository;
  */
 public enum WhereConditionMode {
 	/**
-	 * BY_ID - sistemska operacija za domenski objekat po ID-ju
-	 * BY_NAME - sistemska operacija za domenski objekat po nazivu
-	 * BY_USERNAME_PASSWORD - sistemska operacija za domenski objekat po korisnickom imenu i lozinki 
-	 * (samo za korisnike)
+	 * sistemska operacija za domenski objekat po ID-ju
 	 */
-    BY_ID, BY_NAME, BY_USERNAME_PASSWORD
+    BY_ID,
+    /**
+     * sistemska operacija za domenski objekat po nazivu
+	 */
+    BY_NAME,
+    /**
+     * sistemska operacija za domenski objekat po korisnickom imenu i lozinki 
+	 * (samo za korisnike)
+     */
+    BY_USERNAME_PASSWORD
 }

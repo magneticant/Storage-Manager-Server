@@ -1,6 +1,7 @@
 //package operation.reportItem;
 package rs.np.storage_manager_server.operation.reportItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import rs.np.storage_manager_common.domain.Product;
@@ -9,20 +10,20 @@ import rs.np.storage_manager_server.controller.Controller;
 import rs.np.storage_manager_server.operation.GenericSystemOperation;
 /**
  * Klasa za prikupljanje podataka o svim stavkama izvestaja, parametrizovano, po datumu. Nasledjuje klasu 
- * GenericSystemOperation.
+ * {@link rs.np.storage_manager_server.operation.GenericSystemOperation}.
  * 
  * @author Milan
  */
 public class SelectAllReportItemsParam extends GenericSystemOperation {
 	/**
-	 * privatni atribut items, tipa List<ReportItem>, lista stavki izvestaja koje treba preuzeti iz baze podataka
+	 * privatni atribut items, lista stavki izvestaja koje treba preuzeti iz baze podataka
 	 */
 	private List<ReportItem> items;
     
 	/**
 	 * preduslovi za transakciju
-	 * @param parameter, tipa Object. Objekat nad kojim se vrsi sistemska operacija
-	 * @throws Exception ako je parametar null ili nije tipa ReportItem
+	 * @param parameter, tipa {@link Object}. Objekat nad kojim se vrsi sistemska operacija
+	 * @throws Exception ako je parametar null ili nije tipa {@link ReportItem}
 	 */
     @Override
     protected void preconditions(Object parameter) throws Exception {
@@ -45,14 +46,14 @@ public class SelectAllReportItemsParam extends GenericSystemOperation {
     }
     /**
      * get metoda za stavke izvestaja 
-     * @return items, tipa List<ReportItem>
+     * @return items, kao lista stavki izvestaja ({@link ReportItem}, {@link ArrayList})
      */
     public List<ReportItem> getItems() {
         return items;
     }
     /**
      * privatna metoda koja dodeljuje svaki proizvod odgovarajucoj stavci izvestaja
-     * @param items tipa List<Product>. Lista proizvoda koje treba dodeliti
+     * @param items tipa lista proizvoda. Lista proizvoda koje treba dodeliti
      * stavkama izvestaja
      */
     private void assignProductToReportItem(List<Product> products) {

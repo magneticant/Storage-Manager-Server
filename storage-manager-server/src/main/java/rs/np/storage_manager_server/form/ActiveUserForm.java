@@ -3,11 +3,13 @@ package rs.np.storage_manager_server.form;
 
 import java.util.List;
 
+import javax.swing.JDialog;
+
 import rs.np.storage_manager_common.domain.User;
 import rs.np.storage_manager_server.form.model.UserTableModel;
 
 /**
- * JDialog klasa za prikaz aktivnih korisnika aplikacije
+ * {@link JDialog} klasa za prikaz aktivnih korisnika aplikacije
  * 
  * @author Milan
  */
@@ -19,9 +21,9 @@ private List<User> users;
     /**
      * Parametrizovani konstruktor
      * 
-     * @param parent roditeljski Frame tipa java.awt.Frame
+     * @param parent roditeljski Frame tipa {@link java.awt.Frame}
      * @param modal tipa boolean, predstavlja opciju modalnosti prozora
-     * @param users korisnici ovog programa, tipa List<User>
+     * @param users korisnici ovog programa, kao lista korisnika
      */
     public ActiveUserForm(java.awt.Frame parent, boolean modal, List<User> users) {
         super(parent, modal);
@@ -103,7 +105,7 @@ private List<User> users;
     /**
      * Event handler za klik na dugme cancel. Zatvara se forma
      * 
-     * @param evt tipa java.awt.event.ActionEvent, dogadjaj klika na dugme
+     * @param evt tipa {@link java.awt.event.ActionEvent}, dogadjaj klika na dugme
      */
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         // TODO add your handling code here:
@@ -112,9 +114,21 @@ private List<User> users;
 
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    /**
+     * privatni atribut tipa {@link javax.swing.JButton}, dugme za otkazivanje (cancel)
+     */
     private javax.swing.JButton btnCancel;
+    /**
+     * privatni atribut tipa {@link javax.swing.JScrollPane}, scroll pane prozora (za JFrame)
+     */
     private javax.swing.JScrollPane jScrollPane1;
+    /**
+     * privatni atribut tipa {@link javax.swing.JTable}, tabela korisnika
+     */
     private javax.swing.JTable jTable1;
+    /**
+     * privatni atribut tipa {@link javax.swing.JLabel}, labela za informacije o prikazu tabele
+     */
     private javax.swing.JLabel lblInfo;
     // End of variables declaration//GEN-END:variables
 

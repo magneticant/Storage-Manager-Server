@@ -1,6 +1,7 @@
 //package operation.product;
 package rs.np.storage_manager_server.operation.product;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import rs.np.storage_manager_common.domain.Product;
@@ -8,13 +9,13 @@ import rs.np.storage_manager_server.operation.GenericSystemOperation;
 
 /**
  * Klasa za prikupljanje podataka o svim proizvodima, parametrizovano. Nasledjuje klasu 
- * GenericSystemOperation.
+ * {@link rs.np.storage_manager_server.operation.GenericSystemOperation}.
  * 
  * @author Milan
  */
 public class SelectAllProducts extends GenericSystemOperation{
     /**
-     * privatni atribut products, tipa List<Product>, lista proizvoda koje treba preuzeti iz baze podataka
+     * privatni atribut products, lista proizvoda koje treba preuzeti iz baze podataka
      */
 	private List<Product> products;
 
@@ -28,7 +29,7 @@ public class SelectAllProducts extends GenericSystemOperation{
     /**
      * get metoda za proizvode
      * 
-     * @return products, kao List<Product> (ArrayList)
+     * @return products, kao lista proizvoda ({@link ArrayList})
      */
     public List<Product> getProducts() {
         return products;

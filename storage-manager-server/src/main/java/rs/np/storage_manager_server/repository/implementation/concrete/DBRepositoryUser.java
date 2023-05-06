@@ -15,9 +15,9 @@ import rs.np.storage_manager_common.domain.User;
 import rs.np.storage_manager_server.repository.DBBroker;
 import rs.np.storage_manager_server.repository.DBRepository;
 
-
 /**
- *
+ * Klasa koja predstavlja repozitorijum za korisnika, implementira interfejs {@link DBRepository} 
+ * i prosledjuje {@link User} kao genericki parametar
  * @author Milan
  */
 public class DBRepositoryUser implements DBRepository<User>{

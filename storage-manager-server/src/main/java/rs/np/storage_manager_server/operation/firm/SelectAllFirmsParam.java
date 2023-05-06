@@ -1,6 +1,7 @@
 //package operation.firm;
 package rs.np.storage_manager_server.operation.firm;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import rs.np.storage_manager_common.domain.Firm;
@@ -8,13 +9,13 @@ import rs.np.storage_manager_server.operation.GenericSystemOperation;
 
 /**
  * Klasa za prikupljanje podataka o svim firmama, parametrizovano, po nazivu firme. Nasledjuje klasu 
- * GenericSystemOperation.
+ * {@link rs.np.storage_manager_server.operation.GenericSystemOperation}.
  * 
  * @author Milan
  */
 public class SelectAllFirmsParam extends GenericSystemOperation {
 	/**
-	 * privatni atribut firms, tipa List<Firm>, lista firmi koje treba preuzeti iz baze podataka
+	 * privatni atribut firms, lista firmi koje treba preuzeti iz baze podataka
 	 */
     private List<Firm> firms;
     
@@ -28,7 +29,7 @@ public class SelectAllFirmsParam extends GenericSystemOperation {
     /**
      * get metoda za firme
      * 
-     * @return firms, kao List<Firm> (ArrayList)
+     * @return firms, kao lista firmi ({@link ArrayList}) 
      */
     public List<Firm> getFirms() {
         return firms;

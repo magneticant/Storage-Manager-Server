@@ -7,7 +7,8 @@ import rs.np.storage_manager_common.domain.abstraction.implementation.LegalPerso
 import rs.np.storage_manager_server.repository.DBRepository;
 
 /**
- *
+ * Klasa koja predstavlja repozitorijum za pravno lice, implementira interfejs {@link DBRepositoryLegalPerson} 
+ * i prosledjuje {@link LegalPerson} kao genericki parametar
  * @author Milan
  */
 public class DBRepositoryLegalPerson implements DBRepository<LegalPerson>{

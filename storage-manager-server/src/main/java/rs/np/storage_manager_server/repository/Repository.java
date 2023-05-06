@@ -13,7 +13,7 @@ public interface Repository<T> {
 	/**
 	 * Select operacija za sve domenske objekte u bazi 
 	 * @param parameter tipa java generic, genericki parametar
-	 * @return lista svih domenskih objekata iz baze, kao List<T>
+	 * @return lista svih domenskih objekata iz baze, kao listu
 	 * @throws Exception ako nije moguce preuzeti domenske objekte iz baze podataka
 	 */
     List<T> selectAll(T parameter) throws Exception;
@@ -38,7 +38,7 @@ public interface Repository<T> {
     /**
      * Select operacija za sve objekte u bazi (deprecated)
      * 
-     * @return lista svih domenskih objekata iz baze, kao List<T>
+     * @return lista svih domenskih objekata iz baze, kao {@link List}
      */
     List<T> selectAll();
 }

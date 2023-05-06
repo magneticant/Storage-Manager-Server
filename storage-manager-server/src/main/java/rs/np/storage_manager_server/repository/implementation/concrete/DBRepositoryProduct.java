@@ -16,7 +16,8 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 /**
- *
+ * Klasa koja predstavlja repozitorijum za proizvod, implementira interfejs {@link DBRepository} 
+ * i prosledjuje {@link Product} kao genericki parametar
  * @author Milan
  */
 public class DBRepositoryProduct implements DBRepository<Product>{

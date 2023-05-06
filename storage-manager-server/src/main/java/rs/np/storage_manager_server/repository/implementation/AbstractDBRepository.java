@@ -16,7 +16,7 @@ import rs.np.storage_manager_server.repository.DBRepository;
 
 /**
  * Klasa koja predstavlja apstraktni repozitorijum, implementira interfejs DBRepository 
- * i prosledjuje DomainClass kao genericki parametar
+ * i prosledjuje {@link DomainClass} kao genericki parametar
  * @author Milan
  */
 public class AbstractDBRepository implements DBRepository<DomainClass>{

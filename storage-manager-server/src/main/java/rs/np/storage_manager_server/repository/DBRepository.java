@@ -2,14 +2,14 @@
 package rs.np.storage_manager_server.repository;
 
 /**
- * Javni interfejs koji nasledjuje interfejs Repository<T> (generic), i daje default implementacije
+ * Javni interfejs koji nasledjuje interfejs {@link Repository} (generic), i daje default implementacije
  * metoda connect, disconnect, commit i rollback
  * @author Milan
  */
 public interface DBRepository<T> extends Repository<T> {
 	/**
 	 * default javna metoda za povezivanje sa bazom podataka
-	 * @throws Exception ako nije uspelo povezivanje sa bazom (vidi: DBBroker)
+	 * @throws Exception ako nije uspelo povezivanje sa bazom (vidi: {@link rs.np.storage_manager_server.repository.DBBroker})
 	 */
     default public void connect()throws Exception{
         DBBroker.getInstance().establishConnection();

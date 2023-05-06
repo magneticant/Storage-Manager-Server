@@ -16,7 +16,8 @@ import rs.np.storage_manager_server.repository.DBBroker;
 import rs.np.storage_manager_server.repository.DBRepository;
 
 /**
- *
+ * Klasa koja predstavlja repozitorijum za firmu, implementira interfejs {@link DBRepository} 
+ * i prosledjuje {@link Firm} kao genericki parametar
  * @author Milan
  */
 public class DBRepositoryFirm implements DBRepository<Firm>{

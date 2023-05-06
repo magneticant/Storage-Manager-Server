@@ -15,7 +15,8 @@ import rs.np.storage_manager_common.domain.abstraction.implementation.GoodsRecei
 import rs.np.storage_manager_server.repository.DBBroker;
 import rs.np.storage_manager_server.repository.DBRepository;
 /**
- *
+ * Klasa koja predstavlja repozitorijum za prijemnicu, implementira interfejs {@link DBRepositoryLegalPerson} 
+ * i prosledjuje {@link GoodsReceivedNote} kao genericki parametar
  * @author Milan
  */
 public class DBRepositoryGoodsReceivedNote implements DBRepository<GoodsReceivedNote>{

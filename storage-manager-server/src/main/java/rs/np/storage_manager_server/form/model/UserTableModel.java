@@ -17,13 +17,13 @@ public class UserTableModel extends AbstractTableModel{
 	 */
 	String[] columnNames = new String[]{"ID","name","last name","username", "password"};
 	/**
-	 * package scope lista aktivnih korisnika programa, tipa List<User>
+	 * package scope lista aktivnih korisnika programa
 	 */
     List<User> users;
     /**
      * parametrizovani konstruktor klase
      *  
-     * @param users, tipa List<User>. Lista aktivnih korisnika programa (klijenata koji su prijavljeni)
+     * @param users, kao lista korisnika. Lista aktivnih korisnika programa (klijenata koji su prijavljeni)
      */
     public UserTableModel(List<User> users) {
         this.users = users;
@@ -35,7 +35,7 @@ public class UserTableModel extends AbstractTableModel{
     return columnNames[column];
     }
     /**
-     * Override metode isCellEditable iz AbstractTableModel klase. Nijedno polje nije izmenjivo
+     * Override metode isCellEditable iz {@link AbstractTableModel} klase. Nijedno polje nije izmenjivo
      */
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -68,7 +68,7 @@ public class UserTableModel extends AbstractTableModel{
     /**
      * javna metoda za dodavanje korisnika u tabelu
      * 
-     * @param u tipa User, korisnik za dodavanje u internu listu aktivnih korisnika
+     * @param u tipa {@link User}, korisnik za dodavanje u internu listu aktivnih korisnika
      */
     public void addUser(User u){
         if(!users.contains(u)){

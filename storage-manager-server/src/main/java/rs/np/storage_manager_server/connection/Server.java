@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 
 import rs.np.storage_manager_common.domain.User;
 /**
- * Server klasa (koja je tipa Thread) i koja obezbedjuje okvir za rad sa klijent nitima.
+ * Server klasa (koja je tipa {@link Thread}) i koja obezbedjuje okvir za rad sa klijent nitima.
  * Omogucava uspostavljanje servera, osluskivanje, diskonektovanje korisnika, dobijanje informacija o aktivnim korisnicima 
  * i rad sa klijent nitima.
  * 
@@ -18,15 +18,15 @@ import rs.np.storage_manager_common.domain.User;
  */
 public class Server extends Thread {
 	/**
-	 * privatni atribut tipa ServerSocket koji predstavlja zacetak servera
+	 * privatni atribut tipa {@link ServerSocket} koji predstavlja zacetak servera
 	 */
     private ServerSocket ss;
     /**
-     * package scope atribut tipa List<ClientThread> koji u sebi cuva informaciju o aktivnim klijentima
+     * package scope atribut tipa kao lista {@link ClientThread} koji u sebi cuva informaciju o aktivnim klijentima
      */
     List<ClientThread> activeClients;
     /**
-     * privatni atribut socket koji predstavlja objekat koji nastaje povezivanjem klijenta na server, sa serverske strane.
+     * privatni atribut socket (klase {@link Socket}) koji predstavlja objekat koji nastaje povezivanjem klijenta na server, sa serverske strane.
      */
     private Socket socket;
     /**
@@ -40,7 +40,7 @@ public class Server extends Thread {
         activeClients = new ArrayList<>();
     }
     /**
-     * Glavna run metoda ove Thread klase. Sluzi za osluskivanje i cekanje klijenata da se povezu, i pokretanje njihovih niti.
+     * Glavna run metoda ove {@link Thread} klase. Sluzi za osluskivanje i cekanje klijenata da se povezu, i pokretanje njihovih niti.
      */
     @Override
     public void run() {
@@ -85,7 +85,7 @@ public class Server extends Thread {
      * "Pakuje" sve korisnike koji su trenutno u internoj listi i salje ih kao listu
      * "aktivnih" korisnika.
      * 
-     * @return lista korisnika (User), tipa ArrayList.
+     * @return lista korisnika ({@link User}), tipa {@link ArrayList}.
      */
     public List<User> getActiveUsers(){
         List<User> users = new ArrayList<>();
@@ -96,17 +96,17 @@ public class Server extends Thread {
         return users;
     }
     /**
-     * get metoda za ServerSocket
+     * get metoda za {@link ServerSocket}
      * 
-     * @return server soket kao tip ServerSocket
+     * @return server soket kao tip {@link ServerSocket}
      */
     public ServerSocket getServerSocket() {
         return ss;
     }
     /**
-     * set metoda za ServerSocket
+     * set metoda za {@link ServerSocket}
      * 
-     * @param ss server soket kao tip ServerSocket
+     * @param ss server soket kao tip {@link ServerSocket}
      */
     public void setServerSocket(ServerSocket ss) {
         this.ss = ss;
@@ -114,7 +114,7 @@ public class Server extends Thread {
     /**
      * get metoda za niti aktivnih klijenata
      * 
-     * @return aktivni klijenti kao tip List<ClientThread>. Ovde se vracaju niti klijenata, a ne lista objekata tipa Client
+     * @return aktivni klijenti, kao lista objekata klase {@link ClientThread}. Ovde se vracaju niti klijenata, a ne lista objekata tipa {@link User}
      */
     public List<ClientThread> getActiveClients() {
         return activeClients;
@@ -122,7 +122,7 @@ public class Server extends Thread {
     /**
      * set metoda za niti aktivnih klijenata
      * 
-     * @param activeClients aktivni klijenti kao tip List<ClientThread>. Ovde se prosledjuju niti klijenata, a ne lista objekata tipa Client
+     * @param activeClients aktivni klijenti, kao lista objekata klase {@link ClientThread}. Ovde se prosledjuju niti klijenata, a ne lista objekata tipa {@link ClientThread}
      */
     public void setActiveClients(List<ClientThread> activeClients) {
         this.activeClients = activeClients;
@@ -130,7 +130,7 @@ public class Server extends Thread {
     /**
      * get metoda za soket
      * 
-     * @return soket kao tip Socket
+     * @return soket kao tip {@link Socket}
      */
     public Socket getSocket() {
         return socket;
@@ -138,7 +138,7 @@ public class Server extends Thread {
     /**
      * set metoda za soket
      * 
-     * @param socket kao tip Socket
+     * @param socket kao tip {@link Socket}
      */
     public void setSocket(Socket socket) {
         this.socket = socket;

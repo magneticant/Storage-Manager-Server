@@ -10,6 +10,10 @@ import rs.np.storage_manager_server.controller.Controller;
 
 import java.net.Socket;
 import java.util.List;
+
+import javax.sound.midi.Receiver;
+
+import com.mysql.cj.xdevapi.Client;
 /**
  * Predstavlja serversku klasu gde se izvrsava nit svakog klijenta na serveru.
  * 
@@ -18,27 +22,27 @@ import java.util.List;
  */
 class ClientThread extends Thread {
 	/**
-	 * Privatni atribut socket koji predstavlja soket za rad sa klijentom.
+	 * Privatni atribut socket (tipa {@link Socket}) koji predstavlja soket za rad sa klijentom.
 	 */
     private Socket socket;
     /**
-     * Privatni atribut sender iz common jar-a koji sadrzi mehanizam za slanje "upakovanih" podataka (odgovora) klijentu.
+     * Privatni atribut sender ({@link Sender}) iz common jar-a koji sadrzi mehanizam za slanje "upakovanih" podataka (odgovora) klijentu.
      */
     private Sender sender;
     /**
-     * Privatni atribut sender iz common jar-a koji sadrzi mehanizam za prijem "upakovanih" podataka (odgovora) od klijenta.
+     * Privatni atribut receiever ({@link Receiver}) iz common jar-a koji sadrzi mehanizam za prijem "upakovanih" podataka (odgovora) od klijenta.
      */
     private Receiever receiver;
     /**
-     * Privatni atribut domenske klase user.
+     * Privatni atribut domenske klase {@link User}.
      */
     private User user;
     /**
-     * Privatni atribut Server klase koja sadrzi metode za uspostavljanje konekcije i rad sa nitima klijenata.
+     * Privatni atribut {@link Server} klase koja sadrzi metode za uspostavljanje konekcije i rad sa nitima klijenata.
      */
     private Server server;
     /**
-     * Parametrizovani konstruktor klase ClientThread.
+     * Parametrizovani konstruktor klase {@link ClientThread}.
      * 
      * @param socket sluzi za inicijalizaciju soket-a za komunikaciju sa klijentom
      * @param server sluzi za inicijalizaciju server atributa klase, za rad sa nitima klijenta.
@@ -50,7 +54,7 @@ class ClientThread extends Thread {
         this.server = server;
     }
     /**
-     * Glavna run metoda ove klase (Override-ovana iz klase Thread) 
+     * Glavna run metoda ove klase (Override-ovana iz klase {@link Thread}) 
      * koja sluzi za prijem i razresavanje zahteva klijenata i prosledjivanje 
      * tih zahteva kontroleru.
      */
@@ -206,7 +210,7 @@ class ClientThread extends Thread {
     /**
      * get metoda za soket za komunikaciju.
      * 
-     * @return socket tipa Socket.
+     * @return socket tipa {@link Socket}.
      */
     public Socket getSocket() {
         return socket;
@@ -214,21 +218,21 @@ class ClientThread extends Thread {
     /**
      * get metoda za korisnika (klijenta)
      * 
-     * @return klijent tipa Client
+     * @return klijent tipa {@link Client}
      */
     public User getUser() {
         return user;
     }
     /**
      * get metoda za posiljaoca (sender)
-     * @return posiljalac (domenska klasa common projekta) kao tip Sender
+     * @return posiljalac (domenska klasa common projekta) kao tip {@link Sender}
      */
     public Sender getSender() {
         return sender;
     }
     /**
      * set metoda za posiljaoca (sender)
-     * @param sender posiljalac tipa Sender
+     * @param sender posiljalac tipa {@link Sender}
      */
     public void setSender(Sender sender) {
         this.sender = sender;
@@ -236,7 +240,7 @@ class ClientThread extends Thread {
     /**
      * get metoda za primaoca (receiver)
      * 
-     * @return receiver primalac tipa Receiver
+     * @return receiver primalac tipa {@link Receiver}
      */
     public Receiever getReceiver() {
         return receiver;
@@ -244,7 +248,7 @@ class ClientThread extends Thread {
     /**
      * set metoda za primaoca (receiver)
      * 
-     * @param receiver primalac kao tip Receiver
+     * @param receiver primalac kao tip {@link Receiver}
      */
     public void setReceiver(Receiever receiver) {
         this.receiver = receiver;
@@ -254,7 +258,7 @@ class ClientThread extends Thread {
      * Ona otklanja sve korisnike koji imaju prazan username ili password ili koji su vec
      * prijavljeni na sistem.
      * 
-     * @param user koji se prijavljuje na sistem (param tipa User)
+     * @param user koji se prijavljuje na sistem (param tipa {@link User})
      * 
      * @throws Exception ako je uneti korisnik null.
      */

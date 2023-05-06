@@ -16,11 +16,11 @@ import java.sql.*;
  */
 public class DBBroker {
 	/**
-	 * privatni atribut konekcija, tipa Connection
+	 * privatni atribut konekcija, tipa {@link Connection}
 	 */
     private Connection connection;
     /**
-     * privatni atribut instance, tipa DBBroker, koji sluzi u implementaciji Singleton pattern-a
+     * privatni atribut instance, tipa {@link DBBroker}, koji sluzi u implementaciji Singleton pattern-a
      */
     private static DBBroker instance;
     /**
@@ -30,7 +30,7 @@ public class DBBroker {
     }
     /**
      * javna staticka metoda za dobijanje instance klase preko Singleton pattern-a
-     * @return instance, tipa DBBroker
+     * @return instance, tipa {@link DBBroker}
      */
     public static DBBroker getInstance(){
         if(instance == null)
@@ -39,7 +39,7 @@ public class DBBroker {
     }
     /**
      * metoda za uspostavljanje konekcije sa bazom podataka
-     * @return connection, tipa Connection
+     * @return connection, tipa {@link Connection}
      * @throws Exception ako nije moguce procitati podatke iz konfiguracionog fajla, drajver ne postoji,
      * server za bazu podataka nije podignut ili ako konfiguracioni fajl ne postoji
      */

@@ -1,6 +1,7 @@
 //package operation.legalPerson;
 package rs.np.storage_manager_server.operation.legalPerson;
 
+import java.util.ArrayList;
 //import domain.abstraction.implementation.LegalPerson;
 import java.util.List;
 //import operation.GenericSystemOperation;
@@ -10,13 +11,13 @@ import rs.np.storage_manager_server.operation.GenericSystemOperation;
 
 /**
  * Klasa za prikupljanje podataka o svim pravnim licima, parametrizovano, po nazivu. Nasledjuje klasu 
- * GenericSystemOperation.
+ * {@link rs.np.storage_manager_server.operation.GenericSystemOperation}.
  * 
  * @author Milan
  */
 public class SelectAllLegalPersonsParam extends GenericSystemOperation {
 	/**
-	 * privatni atribut legalPersons, tipa List<LegalPerson>, lista pravnih lica koje treba preuzeti iz baze podataka
+	 * privatni atribut legalPersons, lista pravnih lica koje treba preuzeti iz baze podataka
 	 */
 	private List<LegalPerson> legalPersons;
     
@@ -31,7 +32,7 @@ public class SelectAllLegalPersonsParam extends GenericSystemOperation {
     /**
      * get metoda za pravna lica
      * 
-     * @return legalPersons, kao List<LegalPerson> (ArrayList)
+     * @return legalPersons, kao lista pravnih lica (LegalPerson, {@link ArrayList} )
      */
     public List<LegalPerson> getLegalPersons() {
         return legalPersons;

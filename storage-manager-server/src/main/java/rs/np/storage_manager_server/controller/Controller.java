@@ -86,7 +86,7 @@ public class Controller {
     /**
      * getInstance metoda implementirana preko Singleton pattern-a.
      * 
-     * @return instance tipa Controller.
+     * @return instance tipa {@link Controller}.
      */
     public static Controller getInstance(){
         if(instance == null)
@@ -96,9 +96,9 @@ public class Controller {
     }
     /**
      * Login metoda klijenata na serverskoj strani
-     * @param username korisnicko ime kao String
-     * @param password sifra kao String
-     * @return prijavljeni korisnik kao tip User
+     * @param username korisnicko ime kao {@link String}
+     * @param password sifra kao {@link String}
+     * @return prijavljeni korisnik kao tip {@link User}
      * @throws Exception u slucaju da korisnik nije pronadjen
      */
     public User login(String username, String password) throws Exception{
@@ -118,7 +118,7 @@ public class Controller {
     /**
      * metoda koja poziva sistemsku operaciju da vrati sve proizvode iz baze podataka
      * 
-     * @return lista proizvoda List<Products>
+     * @return lista proizvoda ({@link Product})
      * @throws Exception u slucaju greske prilikom transakcije (izvrsen rollback)
      */
     public List<Product> getAllProducts() throws Exception {
@@ -130,8 +130,8 @@ public class Controller {
      * metoda koja poziva sistemsku operaciju da vrati sve proizvode SA ZADATIM IMENOM 
      * iz baze podataka
      * 
-     * @param product tipa Product, proizvod sa informacijom o imenu za pretragu
-     * @return lista proizvoda List<Products>
+     * @param product tipa {@link Product}, proizvod sa informacijom o imenu za pretragu
+     * @return lista proizvoda ({@link Product})
      * @throws Exception u slucaju greske prilikom transakcije (izvrsen rollback)
      */
     public List<Product> getAllProducts(Product product) throws Exception {
@@ -144,7 +144,7 @@ public class Controller {
     /**
      * metoda koja poziva sistemsku operaciju da izmeni proizvod u bazi podataka
      * 
-     * @param productUpdate tipa Product, proizvod za izmenu u bazi.
+     * @param productUpdate tipa {@link Product}, proizvod za izmenu u bazi.
      * @throws Exception u slucaju greske prilikom transakcije (izvrsen rollback)
      */
     public void updateProduct(Product productUpdate) throws Exception {
@@ -153,7 +153,7 @@ public class Controller {
     }
     /**
      * metoda koja poziva sistemsku operaciju da obrise proizvod u bazi podataka
-     * 
+     * @param productForDeletion proizvod koji treba obrisati iz baze podataka
      * @throws Exception u slucaju greske prilikom transakcije (izvrsen rollback)
      */
     public void deleteProduct(Product productForDeletion) throws Exception {
@@ -163,7 +163,7 @@ public class Controller {
     /**
      * metoda koja poziva sistemsku operaciju da unese proizvod u bazu podataka
      * 
-     * @param productForInsert tipa Product, proizvod za unos u bazu podataka
+     * @param productForInsert tipa {@link Product}, proizvod za unos u bazu podataka
      * @throws Exception u slucaju greske prilikom transakcije (izvrsen rollback)
      */
     public void insertProduct(Product productForInsert) throws Exception {
@@ -174,7 +174,7 @@ public class Controller {
      * metoda koja poziva sistemsku operaciju da unese izvestaj sa svim stavkama
      *  u bazu podataka
      * 
-     * @param reportForInsert tipa Report, izvestaj sa stavkama za unos u bazu podataka.
+     * @param reportForInsertion tipa {@link Report}, izvestaj sa stavkama za unos u bazu podataka.
      * @throws Exception u slucaju greske prilikom transakcije (izvrsen rollback)
      */
     public void insertReport(Report reportForInsertion) throws Exception {
@@ -193,7 +193,7 @@ public class Controller {
     /**
      * metoda koja poziva sistemsku operaciju da vrati sve poslovne partnere iz baze podataka
      * 
-     * @return lista poslovnih partnera List<Partner>
+     * @return lista poslovnih partnera 
      * @throws Exception u slucaju greske prilikom transakcije (izvrsen rollback)
      */
     public List<Partner> getAllPartners() throws Exception {
@@ -208,7 +208,7 @@ public class Controller {
     /**
      * metoda koja poziva sistemsku operaciju da vrati sve firme iz baze podataka
      * 
-     * @return lista firmi List<Firm>
+     * @return lista firmi 
      * @throws Exception u slucaju greske prilikom transakcije (izvrsen rollback)
      */
     public List<Firm> getAllFirms() throws Exception {
@@ -220,7 +220,7 @@ public class Controller {
     /**
      * metoda koja poziva sistemsku operaciju da unese prijemnicu sa svim stavkama u bazu podataka
      * 
-     * @param noteForInsert tipa GoodsReceivedNote, prijemnica sa stavkama za unos u bazu podataka.
+     * @param noteForInsert tipa {@link GoodsReceivedNote}, prijemnica sa stavkama za unos u bazu podataka.
      * @throws Exception u slucaju greske prilikom transakcije (izvrsen rollback)
      */
     public void insertGoodsReceivedNote(GoodsReceivedNote noteForInsert) throws Exception {
@@ -242,7 +242,7 @@ public class Controller {
     /**
      * metoda koja poziva sistemsku operaciju da vrati sva fizicka lica iz baze podataka
      * 
-     * @return lista fizickih lica kao List<NaturalPerson>
+     * @return lista fizickih lica 
      * @throws Exception u slucaju greske prilikom transakcije (izvrsen rollback)
      */
     public List<NaturalPerson> getAllNaturalPersons() throws Exception {
@@ -254,7 +254,7 @@ public class Controller {
     /**
      * metoda koja poziva sistemsku operaciju da vrati sva pravna lica iz baze podataka
      * 
-     * @return lista pravnih lica kao List<NaturalPerson>
+     * @return lista pravnih lica 
      * @throws Exception u slucaju greske prilikom transakcije (izvrsen rollback)
      */
     public List<LegalPerson> getAllLegalPersons() throws Exception {
@@ -267,7 +267,7 @@ public class Controller {
     /**
      * metoda koja poziva sistemsku operaciju da unese otpremnicu sa svim stavkama u bazu podataka
      * 
-     * @param billForInsert tipa BillOfLading, otpremnica za unos u bazu podataka
+     * @param billForInsert tipa {@link BillOfLading}, otpremnica za unos u bazu podataka
      * @throws Exception u slucaju greske prilikom transakcije (izvrsen rollback)
      */
     public void insertBillOfLading(BillOfLading billForInsert) throws Exception {
@@ -290,8 +290,8 @@ public class Controller {
     /**
      * metoda koja poziva sistemsku operaciju da vrati sve izvestaje sa stavkama sa zadatim parametrom
      * 
-     * @param reportForSearch tipa Report, izvestaj sa informacijom na osnovu koje se pretrazuju izvestaji u bazi podataka
-     * @return lista izvestaja List<Report>
+     * @param reportForSearch tipa {@link Report}, izvestaj sa informacijom na osnovu koje se pretrazuju izvestaji u bazi podataka
+     * @return lista izvestaja 
      * @throws Exception u slucaju greske prilikom transakcije (izvrsen rollback)
      */
     public List<Report> getAllReports(Report reportForSearch) throws Exception {
@@ -303,7 +303,7 @@ public class Controller {
     /**
      * metoda koja poziva sistemsku operaciju da vrati sve stavkame izvestaja iz baze podataka
      * 
-     * @return lista stavki izvestaja kao List<ReportItem>
+     * @return lista stavki izvestaja 
      * @throws Exception u slucaju greske prilikom transakcije (izvrsen rollback)
      */
     public List<ReportItem> getAllReportItems() throws Exception {

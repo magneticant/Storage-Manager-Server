@@ -7,7 +7,8 @@ import rs.np.storage_manager_common.domain.abstraction.implementation.NaturalPer
 import rs.np.storage_manager_server.repository.DBRepository;
 
 /**
- *
+ * Klasa koja predstavlja repozitorijum za fizicko lice, implementira interfejs {@link DBRepository} 
+ * i prosledjuje {@link NaturalPerson} kao genericki parametar
  * @author Milan
  */
 public class DBRepositoryNaturalPerson implements DBRepository<NaturalPerson>{

@@ -16,7 +16,7 @@ import rs.np.storage_manager_server.form.ServerForm;
 public class ProjektovanjeSoftveraServer {
 
     /**
-     * Main metoda projekta. Pokrece ServerForm-u.
+     * Main metoda projekta. Pokrece {@link ServerForm}-u.
      * @param args opcioni argumenti komandne linije.
      * 
      */
