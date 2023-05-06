@@ -7,12 +7,21 @@ import rs.np.storage_manager_server.controller.Controller;
 import rs.np.storage_manager_server.operation.GenericSystemOperation;
 
 /**
- *
+ * Klasa za prikupljanje podataka o svim izvestajima, parametrizovano, po datumu. Nasledjuje klasu 
+ * {@link rs.np.storage_manager_server.operation.GenericSystemOperation}.
+ * 
  * @author Milan
  */
 public class SelectAllReportsParam extends GenericSystemOperation {
-    private List<Report> reports;
-    
+	/**
+	 * privatni atribut reports, lista izvestaja koje treba preuzeti iz baze podataka
+	 */
+	private List<Report> reports;
+	/**
+	 * preduslovi za transakciju
+	 * @param parameter, tipa {@link Object}. Objekat nad kojim se vrsi sistemska operacija
+	 * @throws Exception ako je parametar null ili nije tipa {@link Report}
+	 */
     @Override
     protected void preconditions(Object parameter) throws Exception {
     if(parameter == null || !(parameter instanceof Report)){
@@ -30,11 +39,19 @@ public class SelectAllReportsParam extends GenericSystemOperation {
         assignItemToReport(items);
         
     }
-
+    /**
+     * get metoda za izvestaje
+     * 
+     * @return reports, kao lista izvestaja (Report)
+     */
     public List<Report> getReports() {
         return reports;
     }
-
+    /**
+     * privatna metoda koja dodeljuje svaku stavku odgovarajucem izvestaju
+     * @param items kao lista stavki izvestaja (ReportItem). Lista stavki izvestaja koje treba dodeliti
+     * izvestajima
+     */
     private void assignItemToReport(List<ReportItem> items) {
         for(Report report : reports){
             for(ReportItem item: items){

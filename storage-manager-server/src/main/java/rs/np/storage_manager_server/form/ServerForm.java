@@ -12,13 +12,17 @@ import rs.np.storage_manager_common.domain.User;
 import rs.np.storage_manager_server.connection.Server;
 
 /**
- *
+ * {@link JFrame} klasa koja predstavlja glavnu formu servera.
  * @author Milan
  */
 public class ServerForm extends javax.swing.JFrame {
+	/**
+	 * privatni atribut server, predstavlja instancu klase {@link Server} sa metodama za rad sa klijentima
+	 */
 private Server server;
     /**
-     * Creates new form ServerForm
+     * Neparametrizovani konstruktor klase. Poziva initComponents, setExtendedState i 
+     * menja tekst dugmeta txtState na "Server is off"
      */
     public ServerForm() {
         initComponents();
@@ -142,7 +146,10 @@ private Server server;
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    /**
+     * Event handler za klik na dugme off. Gasi se server i zavrsava proces
+     * @param evt tipa {@link java.awt.event.ActionEvent} predstavlja klik na dugme btnOff
+     */
     private void btnOffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOffActionPerformed
         // TODO add your handling code here:
         if(server == null || server.getServerSocket()==null){
@@ -158,7 +165,11 @@ private Server server;
             }
         }
     }//GEN-LAST:event_btnOffActionPerformed
-
+    /**
+     * Event handler za klik na dugme on. Pokrece se server
+     * 
+     * @param evt tipa {@link java.awt.event.ActionEvent}, predstavlja klik na dugme on
+     */
     private void btnOnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOnActionPerformed
         // TODO add your handling code here:
         if(server == null || !server.isAlive()){
@@ -175,12 +186,18 @@ private Server server;
         }else
             JOptionPane.showMessageDialog(this, "Server is already turned on.");
     }//GEN-LAST:event_btnOnActionPerformed
-
+    /**
+     * Event handler za klik na meni opciju settings form. Otvara se nova forma za podesavanja
+     * @param evt tipa {@link java.awt.event.ActionEvent}, predstavalja klik na meni "Settings"
+     */
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
         new SettingsForm(this, true).setVisible(true);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
-
+    /**
+     * Event handler za klik na meni opciju "active users". Otvara se nova forma za prikaz tabele aktivnih korisnika
+     * @param evt tipa {@link java.awt.event.ActionEvent}, predstavalja klik na meni "Active users"
+     */
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         // TODO add your handling code here:
         try{
@@ -192,7 +209,10 @@ private Server server;
             Logger.getLogger(ServerForm.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jMenuItem2ActionPerformed
-
+    /**
+     * Event handler za klik na meni opciju "About". Otvara se novi prozor sa informacijama o serveru.
+     * @param evt tipa {@link java.awt.event.ActionEvent}, predstavalja klik na meni "About"
+     */
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         // TODO add your handling code here:
         JOptionPane.showMessageDialog(this, "WIP");
@@ -200,15 +220,46 @@ private Server server;
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    /**
+     * privatni atribut tipa {@link javax.swing.JButton}, dugme za iskljucivanje servera.
+     * Kada se pritisne gasi se ceo proces servera, ne samo ova forma.
+     */
     private javax.swing.JButton btnOff;
+    /**
+     * privatni atribut tipa {@link javax.swing.JButton}, dugme za ukljucivanje servera.
+     */
     private javax.swing.JButton btnOn;
+    /**
+     * privatni atribut tipa {@link javax.swing.JLabel}, labela za prikaz poruke o podesavanju statusa servera (on ili off)
+     */
     private javax.swing.JLabel jLabel1;
+    /**
+     * privatni atribut tipa {@link javax.swing.JMenu}, meni za prikaz drugih pod-formi
+     */
     private javax.swing.JMenu jMenu1;
+    /**
+     * privatni atribut tipa {@link javax.swing.JMenu}, meni koji sadrzi "About" sekciju kao MenuItem
+     */
     private javax.swing.JMenu jMenu2;
+    /**
+     * privatni atribut tipa {@link javax.swing.JMenuBar}, meni bar glavnog menija (jMenu1)
+     */
     private javax.swing.JMenuBar jMenuBar1;
+    /**
+     * privatni atribut tipa {@link javax.swing.JMenuItem}, podesavanja servera (eng. Settings; kredencijali za konekciju na bazu podataka)
+     */
     private javax.swing.JMenuItem jMenuItem1;
+    /**
+     * privatni atribut tipa {@link javax.swing.JMenuItem}, aktivni korisnici sistema (prikaz tabelarno)
+     */
     private javax.swing.JMenuItem jMenuItem2;
+    /**
+     * privatni atribut tipa {@link javax.swing.JMenuItem}, o softveru (About sekcija)
+     */
     private javax.swing.JMenuItem jMenuItem3;
+    /**
+     * privatni atribut tipa {@link javax.swing.JLabel}, daje informaciju o tome da li je server ukljucen ili ne
+     */
     private javax.swing.JLabel txtState;
     // End of variables declaration//GEN-END:variables
 }

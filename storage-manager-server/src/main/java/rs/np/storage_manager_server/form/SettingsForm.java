@@ -1,26 +1,29 @@
 //package form;
 package rs.np.storage_manager_server.form;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
 import rs.np.storage_manager_server.property.PropertyFileOperation;
 /**
- *
+ * {@link JDialog} forma za promenu podesavanja property fajla za konekciju sa bazom podataka
+ * 
  * @author Milan
  */
 public class SettingsForm extends javax.swing.JDialog {
 
     /**
-     * Creates new form SettingsForm
+     * parametrizovani konstruktor. Poziva super konstruktor, initComponents,
+     * postavlja lokaciju na centar ekrana i naslov na "Setting change form".
+     * Na kraju poziva privatnu metodu forme prepareForm
+     * 
+     * @param parent, tipa {@link java.awt.Frame}, predstavlja "roditeljski" Frame ove {@link JDialog} klase
+     * @param modal, tipa boolean. Predstavlja modalnost prozora
      */
     public SettingsForm(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -115,7 +118,11 @@ public class SettingsForm extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    /**
+     * Event handler za klik na dugme Save. Cuvaju se izmene
+     * 
+     * @param evt tipa {@link java.awt.event.ActionEvent}, dogadjaj klika na dugme
+     */
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
             // TODO add your handling code here:
             int retVal = JOptionPane.showConfirmDialog(this, "Are you sure you want to edit these properties?");
@@ -134,16 +141,47 @@ public class SettingsForm extends javax.swing.JDialog {
 
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    /**
+     * privatni atribut tipa {@link javax.swing.JButton}, dugme za cuvanje izmena
+     */
     private javax.swing.JButton btnSave;
+    /**
+     * privatni atribut tipa {@link javax.swing.JLabel}, labela gde se korisniku naznacuje da treba da unese podatke o kredencijalima 
+     * za konekciju sa bazom podataka
+     */
     private javax.swing.JLabel lblInfo;
+    /**
+     * privatni atribut tipa {@link javax.swing.JLabel}, labela gde se korisniku naznacuje da treba da unese lozinku
+     * za konekciju sa bazom podataka
+     */
     private javax.swing.JLabel lblPassword;
+    /**
+     * privatni atribut tipa {@link javax.swing.JLabel}, labela gde se korisniku naznacuje da treba da unese URL
+     * za konekciju sa bazom podataka
+     */
     private javax.swing.JLabel lblURL;
+    /**
+     * privatni atribut tipa {@link javax.swing.JLabel}, labela gde se korisniku naznacuje da treba da unese korisnicko ime
+     * za konekciju sa bazom podataka
+     */
     private javax.swing.JLabel lblUsername;
+    /**
+     * privatni atribut tipa {@link javax.swing.JTextField}, tekstualno polje za unos nove lozinke baze podataka
+     */
     private javax.swing.JTextField txtPassword;
+    /**
+     * privatni atribut tipa {@link javax.swing.JTextField}, tekstualno polje za unos novog URL-a baze podataka 
+     */
     private javax.swing.JTextField txtUrl;
+    /**
+     * privatni atribut tipa {@link javax.swing.JTextField}, tekstualno polje za unos novog korisnickog imena baze podataka 
+     */
     private javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables
-
+    
+    /**
+     *  privatna metoda za cuvanje izmena u property fajlu; uzima vrednosti koje je korisnik uneo i cuva ih kao key/value parove u property fajlu.
+     */
     private void saveUserProperties() {
         try {
             String url = txtUrl.getText().trim();
@@ -159,7 +197,9 @@ public class SettingsForm extends javax.swing.JDialog {
             Logger.getLogger(SettingsForm.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    /**
+     * privatna metoda za pripremu forme. Ispisuje trenutne vrednosti iz property fajla u grafickim komponentama
+     */
     private void prepareForm() {
         try {
             List<String> credentialList = PropertyFileOperation.readDataFromPropertyFile("config/dbconfig.properties");

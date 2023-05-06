@@ -11,7 +11,8 @@ import rs.np.storage_manager_common.domain.ReportItem;
 import rs.np.storage_manager_server.repository.DBBroker;
 import rs.np.storage_manager_server.repository.DBRepository;
 /**
- *
+ * Klasa koja predstavlja repozitorijum za izvestaj, implementira interfejs {@link DBRepository} 
+ * i prosledjuje {@link Report} kao genericki parametar
  * @author Milan
  */
 public class DBRepositoryReport implements DBRepository<Report>{
