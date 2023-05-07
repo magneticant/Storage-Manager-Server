@@ -1,6 +1,5 @@
 //package connection;
 package rs.np.storage_manager_server.connection;
-import rs.np.storage_manager_common.connection.ReceiverObject;
 import rs.np.storage_manager_common.connection.ReceiverJSON;
 import rs.np.storage_manager_common.connection.Request;
 import rs.np.storage_manager_common.connection.Response;
@@ -94,18 +93,21 @@ class ClientThread extends Thread {
                             break;
                         case INSERT_PRODUCT:
                             System.out.println("ENTERED INSERT PRODUCT");
-                            Product productForInsert = (Product)req.getObj();
+//                            Product productForInsert = (Product)req.getObj();
+                            Product productForInsert = gson.fromJson(req.getObj().toString(), Product.class);
                             Controller.getInstance().insertProduct(productForInsert);
                             break;
                         case INSERT_NOTE:
                             System.out.println("ENTERED INSERT NOTE");
-                            GoodsReceivedNote noteForInsert = (GoodsReceivedNote)req.getObj();
+//                            GoodsReceivedNote noteForInsert = (GoodsReceivedNote)req.getObj();
+                            GoodsReceivedNote noteForInsert = gson.fromJson(req.getObj().toString(), GoodsReceivedNote.class);
                             Controller.getInstance().insertGoodsReceivedNote(noteForInsert);
                             break;
                         case SELECT_ALL_PRODUCTS_PARAM:
                             System.out.println("RECOGNIZED SELECT ALL PRODUCTS PARAM");
                             List<Product> productsResponse;
-                            Product productForSelect = (Product)req.getObj();
+//                            Product productForSelect = (Product)req.getObj();
+                            Product productForSelect = gson.fromJson(req.getObj().toString(), Product.class);
                             productsResponse = Controller.getInstance().getAllProducts(productForSelect);
                             System.out.println("Fetched all products from database.");
                             resp.setResponse(productsResponse);
@@ -120,7 +122,8 @@ class ClientThread extends Thread {
                             break;
                         case SELECT_PRODUCT:
                             System.out.println("ENTERED SELECT PRODUCT");
-                            Product productSelect = (Product)req.getObj();
+//                            Product productSelect = (Product)req.getObj();
+                            Product productSelect = gson.fromJson(req.getObj().toString(), Product.class);
                             List<Product> productListByName;
                             
                             productListByName = Controller.getInstance().getAllProducts(productSelect);
@@ -129,7 +132,8 @@ class ClientThread extends Thread {
                             break;
                         case DELETE_PRODUCT:
                             System.out.println("ENTERED DELETE PRODUCT");
-                            Product productForDeletion = (Product)req.getObj();
+//                            Product productForDeletion = (Product)req.getObj();
+                            Product productForDeletion = gson.fromJson(req.getObj().toString(), Product.class);
                             
                             Controller.getInstance().deleteProduct(productForDeletion);
                             System.out.println("Product deleted successfully.");
@@ -141,7 +145,8 @@ class ClientThread extends Thread {
                             break;
                         case UPDATE_PRODUCT:
                             System.out.println("ENTERED UPDATE PRODUCT");
-                            Product productUpdate = (Product)req.getObj();
+//                            Product productUpdate = (Product)req.getObj();
+                            Product productUpdate = gson.fromJson(req.getObj().toString(), Product.class);
                             
                             Controller.getInstance().updateProduct(productUpdate);
                             System.out.println("Product updated.");
@@ -149,7 +154,8 @@ class ClientThread extends Thread {
                             break;
                         case INSERT_REPORT:
                             System.out.println("ENTERED INSERT REPORT");
-                            Report reportForInsertion = (Report)req.getObj();
+//                            Report reportForInsertion = (Report)req.getObj();
+                            Report reportForInsertion = gson.fromJson(req.getObj().toString(), Report.class);
                             Controller.getInstance().insertReport(reportForInsertion);
                             resp.setResponse(null);
                             break;
@@ -182,7 +188,9 @@ class ClientThread extends Thread {
                             break;
                         case INSERT_BILL:
                             System.out.println("ENTERED INSERT NOTE");
-                            BillOfLading billForInsert = (BillOfLading)req.getObj();
+//                            BillOfLading billForInsert = (BillOfLading)req.getObj();
+                            BillOfLading billForInsert = gson.fromJson(
+                            		req.getObj().toString(), BillOfLading.class);
                             Controller.getInstance().insertBillOfLading(billForInsert);
                             break;
                         case SELECT_ALL_REPORTS:
@@ -194,7 +202,8 @@ class ClientThread extends Thread {
                             break;
                         case SELECT_ALL_REPORTS_PARAM:
                             System.out.println("ENTERED SELECT ALL REPORTS PARAM");
-                            Report reportForSearch = (Report)req.getObj();
+//                            Report reportForSearch = (Report)req.getObj();
+                            Report reportForSearch = gson.fromJson(req.getObj().toString(), Report.class);
                             reports = Controller.getInstance().getAllReports(reportForSearch);
                             resp.setResponse(reports);
                             break;
