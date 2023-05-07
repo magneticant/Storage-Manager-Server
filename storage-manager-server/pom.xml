@@ -27,7 +27,7 @@
 	  <dependency>
 	    <groupId>com.github.magneticant</groupId>
 	    <artifactId>Storage-Manager-Common</artifactId>
-	    <version>1.8.0</version>
+	    <version>1.8.1</version>
 	</dependency>
     <dependency>
 	    <groupId>org.junit.jupiter</groupId>
