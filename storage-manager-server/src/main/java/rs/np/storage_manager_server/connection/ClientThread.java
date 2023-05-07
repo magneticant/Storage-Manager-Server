@@ -1,9 +1,10 @@
 //package connection;
 package rs.np.storage_manager_server.connection;
-import rs.np.storage_manager_common.connection.Receiever;
+import rs.np.storage_manager_common.connection.ReceiverObject;
+import rs.np.storage_manager_common.connection.ReceiverJSON;
 import rs.np.storage_manager_common.connection.Request;
 import rs.np.storage_manager_common.connection.Response;
-import rs.np.storage_manager_common.connection.Sender;
+import rs.np.storage_manager_common.connection.SenderJSON;
 import rs.np.storage_manager_common.domain.*;
 import rs.np.storage_manager_common.domain.abstraction.implementation.*;
 import rs.np.storage_manager_server.controller.Controller;
@@ -11,9 +12,12 @@ import rs.np.storage_manager_server.controller.Controller;
 import java.net.Socket;
 import java.util.List;
 
-import javax.sound.midi.Receiver;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
-import com.mysql.cj.xdevapi.Client;
+//import javax.sound.midi.Receiver;
+
+
 /**
  * Predstavlja serversku klasu gde se izvrsava nit svakog klijenta na serveru.
  * 
@@ -28,11 +32,11 @@ class ClientThread extends Thread {
     /**
      * Privatni atribut sender ({@link Sender}) iz common jar-a koji sadrzi mehanizam za slanje "upakovanih" podataka (odgovora) klijentu.
      */
-    private Sender sender;
+    private SenderJSON sender;
     /**
      * Privatni atribut receiever ({@link Receiver}) iz common jar-a koji sadrzi mehanizam za prijem "upakovanih" podataka (odgovora) od klijenta.
      */
-    private Receiever receiver;
+    private ReceiverJSON receiver;
     /**
      * Privatni atribut domenske klase {@link User}.
      */
@@ -49,8 +53,8 @@ class ClientThread extends Thread {
      */
     public ClientThread(Socket socket, Server server) {
         this.socket = socket;
-        sender = new Sender(socket);
-        receiver = new Receiever(socket);
+        sender = new SenderJSON(socket);
+        receiver = new ReceiverJSON(socket);
         this.server = server;
     }
     /**
@@ -61,8 +65,11 @@ class ClientThread extends Thread {
     @Override
     public void run() {
         while(true){
+        	Gson gson = new GsonBuilder().serializeNulls().create();
             try {
-                Request req = (Request)receiver.receiveObject();
+            	
+//                Request req = (Request)receiver.receiveObject();
+            	Request req = gson.fromJson((String)receiver.receiveObject(), Request.class);
                 Response resp = new Response();                /*
                 LOGIN, INSERT_PRODUCT, INSERT_NOTE, SELECT_ALL_PRODUCTS,
     SELECT_PODUCT, DELETE_PRODUCT, SELECT_NOTE, DELETE_NOTE, 
@@ -70,9 +77,12 @@ class ClientThread extends Thread {
                 */
                 
                 try{
+                	
                     switch(req.getOperation()){
                         case LOGIN:
-                            User u = (User) req.getObj();
+                        	
+//                        	User u = (User) req.getObj();
+                            User u = gson.fromJson(req.getObj().toString(), User.class);
                             
                             u = Controller.getInstance().login(u.getUsername(), u.getPassword());
                             System.out.println("USER IS " + u);
@@ -195,14 +205,16 @@ class ClientThread extends Thread {
                 }catch(Exception ex){
                     System.out.println("Client thread: CRUD Operation exception");
                     System.out.println(ex);
-                    resp.setEx(ex);
+                    String message = ex.getMessage();
+                    resp.setExMessage(message);
                 }
-                System.out.println("SENDING OBJECT: " + resp.getResponse());
-                System.out.println("EXCEPTION CONTENT: " + resp.getEx());
-                sender.sendObject(resp);
+//                System.out.println(gson.toJson(resp.getEx()));
+//                System.out.println(gson.toJson(resp));
+                sender.sendObject(gson.toJson(resp));
                 System.out.println("SENT!");
             } catch (Exception ex) {
                 System.out.println("Request processing exception");
+                ex.printStackTrace();
                 break;
             }
         }
@@ -227,14 +239,14 @@ class ClientThread extends Thread {
      * get metoda za posiljaoca (sender)
      * @return posiljalac (domenska klasa common projekta) kao tip {@link Sender}
      */
-    public Sender getSender() {
+    public SenderJSON getSender() {
         return sender;
     }
     /**
      * set metoda za posiljaoca (sender)
      * @param sender posiljalac tipa {@link Sender}
      */
-    public void setSender(Sender sender) {
+    public void setSender(SenderJSON sender) {
         this.sender = sender;
     }
     /**
@@ -242,7 +254,7 @@ class ClientThread extends Thread {
      * 
      * @return receiver primalac tipa {@link Receiver}
      */
-    public Receiever getReceiver() {
+    public ReceiverJSON getReceiver() {
         return receiver;
     }
     /**
@@ -250,7 +262,7 @@ class ClientThread extends Thread {
      * 
      * @param receiver primalac kao tip {@link Receiver}
      */
-    public void setReceiver(Receiever receiver) {
+    public void setReceiver(ReceiverJSON receiver) {
         this.receiver = receiver;
     }
     /**
