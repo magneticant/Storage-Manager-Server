@@ -55,9 +55,9 @@ public class SelectAllReportsParam extends GenericSystemOperation {
     private void assignItemToReport(List<ReportItem> items) {
         for(Report report : reports){
             for(ReportItem item: items){
-                if(item == null || item.getReport() == null)
+                if(item == null || item.getReportID() == null)
                     continue;
-                if(report.getReportDate().equals(item.getReport().getReportDate())){
+                if(report.getReportDate().equals(item.getReportID())){
                     report.getReportItems().add(item);
                 }
                     

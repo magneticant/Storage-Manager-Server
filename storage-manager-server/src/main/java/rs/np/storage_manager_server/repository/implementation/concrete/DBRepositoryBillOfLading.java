@@ -50,7 +50,7 @@ public class DBRepositoryBillOfLading implements DBRepository<BillOfLading>{
             
             for(AbstractDocumentItem item : parameter.getItems()) {
                 System.out.println(item);
-                item.setDocument(parameter);
+                item.setDocumentID(parameter.getID());
             String query1 = "INSERT INTO " + ((BillOfLadingItem)item).getTableName() +
                               " ("+((BillOfLadingItem)item).getColumnsWithoutID() + " )" +
                             "VALUES " + ((BillOfLadingItem)item).getInsertValues() + ";";

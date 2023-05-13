@@ -2,13 +2,17 @@
 package rs.np.storage_manager_server.connection;
 import rs.np.storage_manager_common.connection.ReceiverJSON;
 import rs.np.storage_manager_common.connection.Request;
+import rs.np.storage_manager_common.connection.RequestJSON;
 import rs.np.storage_manager_common.connection.Response;
+import rs.np.storage_manager_common.connection.ResponseJSON;
 import rs.np.storage_manager_common.connection.SenderJSON;
 import rs.np.storage_manager_common.domain.*;
 import rs.np.storage_manager_common.domain.abstraction.implementation.*;
+import rs.np.storage_manager_common.domain.utility.TransferType;
 import rs.np.storage_manager_server.controller.Controller;
 
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.Gson;
@@ -64,12 +68,15 @@ class ClientThread extends Thread {
     @Override
     public void run() {
         while(true){
-        	Gson gson = new GsonBuilder().serializeNulls().create();
+        	GsonBuilder gsonBuilder = new GsonBuilder().serializeNulls()
+        			.setDateFormat("yyyy-MM-dd");
+            Gson gson = gsonBuilder.create();
             try {
             	
-//                Request req = (Request)receiver.receiveObject();
-            	Request req = gson.fromJson((String)receiver.receiveObject(), Request.class);
-                Response resp = new Response();                /*
+                RequestJSON req = receiver.receiveObject(RequestJSON.class);
+//            	Request req = gson.fromJson(receiver.receiveObject().toString(), Request.class);
+                ResponseJSON resp = new ResponseJSON();    
+                /*
                 LOGIN, INSERT_PRODUCT, INSERT_NOTE, SELECT_ALL_PRODUCTS,
     SELECT_PODUCT, DELETE_PRODUCT, SELECT_NOTE, DELETE_NOTE, 
     UPDATE_PRODUCT, INSERT_REPORT
@@ -80,37 +87,44 @@ class ClientThread extends Thread {
                     switch(req.getOperation()){
                         case LOGIN:
                         	
-//                        	User u = (User) req.getObj();
-                            User u = gson.fromJson(req.getObj().toString(), User.class);
+                        	User u = (User)req.getObj(User.class);
+//                            User u = gson.fromJson(req.getObj().toString(), User.class);
                             
                             u = Controller.getInstance().login(u.getUsername(), u.getPassword());
                             System.out.println("USER IS " + u);
                             this.user = u;
                             checkForLoginStatus(u);
                             System.out.println("Passed the checks");
-                            resp.setResponse(u);
+                            resp.setResponse(u, User.class);
                             
                             break;
                         case INSERT_PRODUCT:
                             System.out.println("ENTERED INSERT PRODUCT");
-//                            Product productForInsert = (Product)req.getObj();
-                            Product productForInsert = gson.fromJson(req.getObj().toString(), Product.class);
+                            Product productForInsert = (Product)req.getObj(Product.class);
+//                            Product productForInsert = gson.fromJson(req.getObj().toString(), Product.class);
                             Controller.getInstance().insertProduct(productForInsert);
                             break;
                         case INSERT_NOTE:
                             System.out.println("ENTERED INSERT NOTE");
-//                            GoodsReceivedNote noteForInsert = (GoodsReceivedNote)req.getObj();
-                            GoodsReceivedNote noteForInsert = gson.fromJson(req.getObj().toString(), GoodsReceivedNote.class);
+                            GoodsReceivedNote noteForInsert = (GoodsReceivedNote)req.getObj(GoodsReceivedNote.class);
+//                            System.out.println("1");
+//                            System.out.println(req.getObj().getClass());
+//                            System.out.println("2");
+//                            GoodsReceivedNote noteForInsert = gson.fromJson(gson.toJson(req.getObj()),
+//                            		GoodsReceivedNote.class);
+//                            System.out.println(noteForInsert);
+//                            System.out.println("3");
                             Controller.getInstance().insertGoodsReceivedNote(noteForInsert);
+//                            System.out.println("4");
                             break;
                         case SELECT_ALL_PRODUCTS_PARAM:
                             System.out.println("RECOGNIZED SELECT ALL PRODUCTS PARAM");
                             List<Product> productsResponse;
-//                            Product productForSelect = (Product)req.getObj();
-                            Product productForSelect = gson.fromJson(req.getObj().toString(), Product.class);
+                            Product productForSelect = (Product)req.getObj(Product.class);
+//                            Product productForSelect = gson.fromJson(req.getObj().toString(), Product.class);
                             productsResponse = Controller.getInstance().getAllProducts(productForSelect);
                             System.out.println("Fetched all products from database.");
-                            resp.setResponse(productsResponse);
+                            resp.setResponse(productsResponse, Product[].class);
                             break;
                         case SELECT_ALL_PRODUCTS:
                             System.out.println("RECOGNIZED SELECT ALL PRODUCTS");
@@ -118,26 +132,26 @@ class ClientThread extends Thread {
                             
                             products = Controller.getInstance().getAllProducts();
                             System.out.println("Fetched all products from database.");
-                            resp.setResponse(products);
+                            resp.setResponse(products, Product[].class );
                             break;
                         case SELECT_PRODUCT:
                             System.out.println("ENTERED SELECT PRODUCT");
-//                            Product productSelect = (Product)req.getObj();
-                            Product productSelect = gson.fromJson(req.getObj().toString(), Product.class);
+                            Product productSelect = (Product)req.getObj(Product.class);
+//                            Product productSelect = gson.fromJson(req.getObj().toString(), Product.class);
                             List<Product> productListByName;
                             
                             productListByName = Controller.getInstance().getAllProducts(productSelect);
                             System.out.println("Fetched list with one product from database according to Name.");
-                            resp.setResponse(productListByName);
+                            resp.setResponse(productListByName, Product[].class);
                             break;
                         case DELETE_PRODUCT:
                             System.out.println("ENTERED DELETE PRODUCT");
-//                            Product productForDeletion = (Product)req.getObj();
-                            Product productForDeletion = gson.fromJson(req.getObj().toString(), Product.class);
+                            Product productForDeletion = (Product)req.getObj(Product.class);
+//                            Product productForDeletion = gson.fromJson(req.getObj().toString(), Product.class);
                             
                             Controller.getInstance().deleteProduct(productForDeletion);
                             System.out.println("Product deleted successfully.");
-                            resp.setResponse(null);
+                            resp.setResponse(null, Product.class);
                             break;
                         case SELECT_NOTE:
                             break;
@@ -145,52 +159,55 @@ class ClientThread extends Thread {
                             break;
                         case UPDATE_PRODUCT:
                             System.out.println("ENTERED UPDATE PRODUCT");
-//                            Product productUpdate = (Product)req.getObj();
-                            Product productUpdate = gson.fromJson(req.getObj().toString(), Product.class);
+                            Product productUpdate = (Product)req.getObj(Product.class);
+//                            Product productUpdate = gson.fromJson(req.getObj().toString(), Product.class);
                             
                             Controller.getInstance().updateProduct(productUpdate);
                             System.out.println("Product updated.");
-                            resp.setResponse(productUpdate);
+                            resp.setResponse(productUpdate, Product.class);
                             break;
                         case INSERT_REPORT:
                             System.out.println("ENTERED INSERT REPORT");
-//                            Report reportForInsertion = (Report)req.getObj();
-                            Report reportForInsertion = gson.fromJson(req.getObj().toString(), Report.class);
+                            Report reportForInsertion = (Report)req.getObj(Report.class);
+//                            System.out.println("****************");
+//                    		System.out.println(req.getObj());
+//                    		System.out.println("****************");
+//                            Report reportForInsertion = gson.fromJson(req.getObj().toString(), Report.class);
                             Controller.getInstance().insertReport(reportForInsertion);
-                            resp.setResponse(null);
+                            resp.setResponse(null, Report.class);
                             break;
                         case SELECT_ALL_PARTNERS:
                             System.out.println("ENTERED SELECT ALL PARTNERS");
                             List<Partner> partners;
                             partners = Controller.getInstance().getAllPartners();
                             System.out.println("Fetched all partners from database.");
-                            resp.setResponse(partners);
+                            resp.setResponse(partners, Partner[].class);
                             break;
                         case SELECT_ALL_FIRMS:
                             System.out.println("ENTERED SELECT ALL FIRMS");
                             List<Firm> firms;
                             firms = Controller.getInstance().getAllFirms();
                             System.out.println("Fetched all firms from database.");
-                            resp.setResponse(firms);
+                            resp.setResponse(firms, Firm[].class);
                             break;
                         case SELECT_ALL_NATURAL_PERSONS:
                             System.out.println("ENTERED SELECT ALL NATURAL PERSONS");
                             List<NaturalPerson> naturalPersons;
                             naturalPersons = Controller.getInstance().getAllNaturalPersons();
                             System.out.println("Fetched all natural persons from database.");
-                            resp.setResponse(naturalPersons);
+                            resp.setResponse(naturalPersons, NaturalPerson[].class);
                             break;
                         case SELECT_ALL_LEGAL_PERSONS:
                             System.out.println("ENTERED SELECT ALL LEGAL PERSONS");
                             List<LegalPerson> legalPersons = Controller.getInstance().getAllLegalPersons();
                             System.out.println("Fetched all legal persons from database.");
-                            resp.setResponse(legalPersons);
+                            resp.setResponse(legalPersons, LegalPerson[].class);
                             break;
                         case INSERT_BILL:
                             System.out.println("ENTERED INSERT NOTE");
-//                            BillOfLading billForInsert = (BillOfLading)req.getObj();
-                            BillOfLading billForInsert = gson.fromJson(
-                            		req.getObj().toString(), BillOfLading.class);
+                            BillOfLading billForInsert = (BillOfLading)req.getObj(BillOfLading.class);
+//                            BillOfLading billForInsert = gson.fromJson(
+//                            		req.getObj().toString(), BillOfLading.class);
                             Controller.getInstance().insertBillOfLading(billForInsert);
                             break;
                         case SELECT_ALL_REPORTS:
@@ -198,14 +215,14 @@ class ClientThread extends Thread {
                             List<Report> reports;
                             reports = Controller.getInstance().getAllReports(new Report());
                             System.out.println("Fetched all reports from database.");
-                            resp.setResponse(reports);
+                            resp.setResponse(reports, Report[].class);
                             break;
                         case SELECT_ALL_REPORTS_PARAM:
                             System.out.println("ENTERED SELECT ALL REPORTS PARAM");
-//                            Report reportForSearch = (Report)req.getObj();
-                            Report reportForSearch = gson.fromJson(req.getObj().toString(), Report.class);
+                            Report reportForSearch = (Report)req.getObj(Report.class);
+//                            Report reportForSearch = gson.fromJson(req.getObj().toString(), Report.class);
                             reports = Controller.getInstance().getAllReports(reportForSearch);
-                            resp.setResponse(reports);
+                            resp.setResponse(reports, Report[].class);
                             break;
                         default: 
                             System.out.println("n/a");
@@ -219,7 +236,7 @@ class ClientThread extends Thread {
                 }
 //                System.out.println(gson.toJson(resp.getEx()));
 //                System.out.println(gson.toJson(resp));
-                sender.sendObject(gson.toJson(resp));
+                sender.sendObject(resp);
                 System.out.println("SENT!");
             } catch (Exception ex) {
                 System.out.println("Request processing exception");
