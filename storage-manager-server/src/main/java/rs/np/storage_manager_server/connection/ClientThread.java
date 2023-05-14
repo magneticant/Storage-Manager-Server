@@ -1,11 +1,12 @@
 //package connection;
 package rs.np.storage_manager_server.connection;
-import rs.np.storage_manager_common.connection.ReceiverJSON;
-import rs.np.storage_manager_common.connection.Request;
-import rs.np.storage_manager_common.connection.RequestJSON;
-import rs.np.storage_manager_common.connection.Response;
-import rs.np.storage_manager_common.connection.ResponseJSON;
-import rs.np.storage_manager_common.connection.SenderJSON;
+import rs.np.storage_manager_common.connection.abstraction.Receiver;
+import rs.np.storage_manager_common.connection.abstraction.Request;
+import rs.np.storage_manager_common.connection.abstraction.Response;
+import rs.np.storage_manager_common.connection.abstraction.Sender;
+import rs.np.storage_manager_common.connection.abstraction.JSONImpl.*;
+import rs.np.storage_manager_common.connection.abstraction.objectImpl.RequestObject;
+import rs.np.storage_manager_common.connection.abstraction.objectImpl.ResponseObject;
 import rs.np.storage_manager_common.domain.*;
 import rs.np.storage_manager_common.domain.abstraction.implementation.*;
 import rs.np.storage_manager_common.domain.utility.TransferType;
@@ -35,11 +36,11 @@ class ClientThread extends Thread {
     /**
      * Privatni atribut sender ({@link Sender}) iz common jar-a koji sadrzi mehanizam za slanje "upakovanih" podataka (odgovora) klijentu.
      */
-    private SenderJSON sender;
+    private Sender sender;
     /**
      * Privatni atribut receiever ({@link Receiver}) iz common jar-a koji sadrzi mehanizam za prijem "upakovanih" podataka (odgovora) od klijenta.
      */
-    private ReceiverJSON receiver;
+    private Receiver receiver;
     /**
      * Privatni atribut domenske klase {@link User}.
      */
@@ -73,9 +74,9 @@ class ClientThread extends Thread {
             Gson gson = gsonBuilder.create();
             try {
             	
-                RequestJSON req = receiver.receiveObject(RequestJSON.class);
+                Request req = receiver.receiveObject(RequestJSON.class);
 //            	Request req = gson.fromJson(receiver.receiveObject().toString(), Request.class);
-                ResponseJSON resp = new ResponseJSON();    
+                Response resp = new ResponseJSON();    
                 /*
                 LOGIN, INSERT_PRODUCT, INSERT_NOTE, SELECT_ALL_PRODUCTS,
     SELECT_PODUCT, DELETE_PRODUCT, SELECT_NOTE, DELETE_NOTE, 
@@ -265,14 +266,14 @@ class ClientThread extends Thread {
      * get metoda za posiljaoca (sender)
      * @return posiljalac (domenska klasa common projekta) kao tip {@link Sender}
      */
-    public SenderJSON getSender() {
+    public Sender getSender() {
         return sender;
     }
     /**
      * set metoda za posiljaoca (sender)
      * @param sender posiljalac tipa {@link Sender}
      */
-    public void setSender(SenderJSON sender) {
+    public void setSender(Sender sender) {
         this.sender = sender;
     }
     /**
@@ -280,7 +281,7 @@ class ClientThread extends Thread {
      * 
      * @return receiver primalac tipa {@link Receiver}
      */
-    public ReceiverJSON getReceiver() {
+    public Receiver getReceiver() {
         return receiver;
     }
     /**
@@ -288,7 +289,7 @@ class ClientThread extends Thread {
      * 
      * @param receiver primalac kao tip {@link Receiver}
      */
-    public void setReceiver(ReceiverJSON receiver) {
+    public void setReceiver(Receiver receiver) {
         this.receiver = receiver;
     }
     /**
