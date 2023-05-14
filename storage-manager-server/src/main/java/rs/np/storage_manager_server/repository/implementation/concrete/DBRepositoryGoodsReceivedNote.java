@@ -48,7 +48,7 @@ public class DBRepositoryGoodsReceivedNote implements DBRepository<GoodsReceived
             
             for(AbstractDocumentItem item : parameter.getItems()) {
                 System.out.println(item);
-                item.setDocument(parameter);
+                item.setDocumentID(parameter.getID());
             String query1 = "INSERT INTO " + ((GoodsReceivedNoteItem)item).getTableName() +
                               ((GoodsReceivedNoteItem)item).getColumnsWithoutID() +
                             "VALUES " + ((GoodsReceivedNoteItem)item).getInsertValues() + ";";
