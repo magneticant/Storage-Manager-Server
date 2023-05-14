@@ -1,26 +1,22 @@
-//package connection;
 package rs.np.storage_manager_server.connection;
 import rs.np.storage_manager_common.connection.abstraction.Receiver;
 import rs.np.storage_manager_common.connection.abstraction.Request;
 import rs.np.storage_manager_common.connection.abstraction.Response;
 import rs.np.storage_manager_common.connection.abstraction.Sender;
-import rs.np.storage_manager_common.connection.abstraction.JSONImpl.*;
+import rs.np.storage_manager_common.connection.abstraction.JSONImpl.ReceiverJSON;
+import rs.np.storage_manager_common.connection.abstraction.JSONImpl.RequestJSON;
+import rs.np.storage_manager_common.connection.abstraction.JSONImpl.ResponseJSON;
+import rs.np.storage_manager_common.connection.abstraction.JSONImpl.SenderJSON;
+import rs.np.storage_manager_common.connection.abstraction.objectImpl.ReceiverObject;
 import rs.np.storage_manager_common.connection.abstraction.objectImpl.RequestObject;
 import rs.np.storage_manager_common.connection.abstraction.objectImpl.ResponseObject;
+import rs.np.storage_manager_common.connection.abstraction.objectImpl.SenderObject;
 import rs.np.storage_manager_common.domain.*;
 import rs.np.storage_manager_common.domain.abstraction.implementation.*;
-import rs.np.storage_manager_common.domain.utility.TransferType;
 import rs.np.storage_manager_server.controller.Controller;
 
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.List;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-//import javax.sound.midi.Receiver;
-
 
 /**
  * Predstavlja serversku klasu gde se izvrsava nit svakog klijenta na serveru.
@@ -69,9 +65,7 @@ class ClientThread extends Thread {
     @Override
     public void run() {
         while(true){
-        	GsonBuilder gsonBuilder = new GsonBuilder().serializeNulls()
-        			.setDateFormat("yyyy-MM-dd");
-            Gson gson = gsonBuilder.create();
+        	
             try {
             	
                 Request req = receiver.receiveObject(RequestJSON.class);
