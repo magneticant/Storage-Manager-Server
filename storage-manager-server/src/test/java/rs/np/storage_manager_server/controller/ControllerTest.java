@@ -220,7 +220,7 @@ class ControllerTest {
 	void deleteProductTest() {
 		truncateTable("artikal");
 		
-		Product p1 = new Product(1,"table T1",
+		Product p1 = new Product(15,"table T1",
 				10.0, false, 20, ProductType.Furniture, new BigDecimal(1000.0));
 	
 		try {
@@ -388,9 +388,9 @@ class ControllerTest {
 			controller.insertProduct(p1);
 			controller.insertProduct(p2);
 			controller.insertGoodsReceivedNote(note);
-			List<GoodsReceivedNote> notes = SelectQueries.selectAllNotes();
+			List<GoodsReceivedNote> notes = ExtraQueries.selectAllNotes();
 			
-			List<GoodsReceivedNoteItem> dbItems = SelectQueries.selectAllNoteItems();
+			List<GoodsReceivedNoteItem> dbItems = ExtraQueries.selectAllNoteItems();
 			
 			
 			assertTrue(notes.size() == 1);
@@ -409,7 +409,59 @@ class ControllerTest {
 	}
 	
 	
-	private static class SelectQueries{
+	@Test
+	@DisplayName("Insert bill test")
+	void insertNBillTest() {
+		truncateTable("artikal");
+		truncateTable("stavkaotpremnice");
+		truncateTable("otpremnica");
+		
+		Product p1 = new Product(1,"productName1",10.0,false,10,ProductType.Art,new BigDecimal(10.0));
+		Product p2 = new Product(2, "productName2", 20.0, false,20, ProductType.CarAccesory, new BigDecimal(20.0));
+		
+		Firm firm1 = new Firm(1, "firmName1", "firmAddress1");
+		Buyer buyer = new Buyer();
+		buyer.setID(1);
+		NaturalPerson np = new NaturalPerson(1, buyer, "firstName", "lastName");
+		BillOfLadingItem item1 = new BillOfLadingItem(1, 1, np ,firm1, 2, p1, WhereClauseMode.BY_ID);
+		BillOfLadingItem item2 = new BillOfLadingItem(2, 1, np, firm1, 5, p2, WhereClauseMode.BY_NAME);
+		
+		List<BillOfLadingItem> items = Arrays.asList(item1, item2);
+		try {
+			BillOfLading bill = new BillOfLading(1, np, firm1, sdf.parse("2020-04-04"), sdf.parse("2025-01-04"), new BigDecimal(1200.0), WhereClauseMode.BY_ID);
+			bill.setItems(items);
+			controller.insertProduct(p1);
+			controller.insertProduct(p2);
+			controller.insertBillOfLading(bill);
+			List<BillOfLading> bills = ExtraQueries.selectAllBills();
+			
+			List<BillOfLadingItem> dbItems = ExtraQueries.selectAllBillItems();
+			
+			
+			assertTrue(bills.size() == 1);
+			assertTrue(bills.get(0).equals(bill));
+			assertTrue(dbItems.size() == 2);
+			assertTrue(dbItems.contains(item1));
+			assertTrue(dbItems.contains(item2));
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Test has thrown an exception");
+		} finally {
+			truncateTable("artikal");
+			truncateTable("stavkaotpremnice");
+			truncateTable("otpremnica");
+		}
+	}
+	
+	@Test
+	@DisplayName("Select all reports test")
+	void getAllReportsTest() {
+		//ovo i nije neophodno, test je dodat radi kompletnosti.
+		//testom insertReportTest je provereno i selectAllReports.
+		insertReportTest();
+	}
+	
+	private static class ExtraQueries{
 	private static List<GoodsReceivedNote> selectAllNotes(){
 		Connection conn;
 		try {
@@ -478,7 +530,91 @@ class ControllerTest {
 		}
 		return null;
 	}
+	private static List<BillOfLading> selectAllBills(){
+		Connection conn;
+		try {
+			conn = DBBroker.getInstance().establishConnection();
+			String query = "SELECT * FROM OTPREMNICA;";
+			Statement statement = conn.createStatement();
+			
+			ResultSet rs = statement.executeQuery(query);
+			
+			List<BillOfLading> bills = new ArrayList<>();
+			while(rs.next()) {
+				Integer ID = rs.getInt("IDOtpremnice");
+				Integer IDKupca = rs.getInt("IDKupca");
+				Integer IDFirme = rs.getInt("IDFirme");
+				Date issueDate = DateParser.sqlDateToUtilDate(rs.getDate("datumIzdavanja"));
+				Date dueDate = DateParser.sqlDateToUtilDate(rs.getDate("datumValute"));
+				BigDecimal totalPrice = new BigDecimal(rs.getDouble("ukupanIznos"));
+				
+				Firm firm = new Firm();
+				firm.setID(IDFirme);
+				Buyer buyer = new Buyer();
+				buyer.setID(IDKupca);
+				
+				BillOfLading bill = new BillOfLading(ID, buyer, firm, issueDate, dueDate, totalPrice, WhereClauseMode.BY_ID);
+				bills.add(bill);
+			}
+			
+			return bills;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
+	private static List<BillOfLadingItem> selectAllBillItems(){
+		String query = "SELECT * FROM STAVKAOTPREMNICE;";
+		try {
+			Connection conn = DBBroker.getInstance().establishConnection();
+			Statement statement = conn.createStatement();
+			ResultSet rs = statement.executeQuery(query);
+			
+			List<BillOfLadingItem> items = new ArrayList<>();
+			while(rs.next()) {
+				Integer ID = rs.getInt("IDStavke");
+				Integer billID = rs.getInt("IDOtpremnice");
+				Integer FirmID = rs.getInt("IDFirme");
+				Integer buyerID = rs.getInt("IDKupca");
+				Integer amountTaken = rs.getInt("izdataKolP");
+				Integer ProductID = rs.getInt("sifraArtikla");
+				
+				Firm firm = new Firm();
+				firm.setID(FirmID);
+				Buyer buyer = new Buyer();
+				buyer.setID(buyerID);
+				Product product = new Product();
+				product.setID(ProductID);
+				
+				BillOfLadingItem item = new 
+						BillOfLadingItem(ID, billID, buyer, firm, amountTaken, product, WhereClauseMode.BY_ID);
+				items.add(item);
+			}
+			
+			return items;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 	
+	private static void insertReportItem(ReportItem item) {
+		String query = "INSERT INTO " + item.getTableName() +
+                " (" + item.getColumnsWithoutID() + ") " +
+               "VALUES " + item.getInsertValues() + ";";
+		System.out.println(query);
+		try {
+			Connection conn = DBBroker.getInstance().establishConnection();
+			Statement statement = conn.createStatement();
+			statement.executeUpdate(query);
+			System.out.println("============================");
+			System.out.println("           SUCCESS          ");
+			System.out.println("============================");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	}
 }
