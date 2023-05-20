@@ -1,0 +1,334 @@
+package rs.np.storage_manager_server.controller;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.List;
+import java.util.ResourceBundle.Control;
+
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import rs.np.storage_manager_common.domain.Firm;
+import rs.np.storage_manager_common.domain.Partner;
+import rs.np.storage_manager_common.domain.Product;
+import rs.np.storage_manager_common.domain.ProductType;
+import rs.np.storage_manager_common.domain.User;
+import rs.np.storage_manager_common.domain.WhereClauseMode;
+import rs.np.storage_manager_common.domain.abstraction.Buyer;
+import rs.np.storage_manager_common.domain.abstraction.implementation.LegalPerson;
+import rs.np.storage_manager_common.domain.abstraction.implementation.NaturalPerson;
+import rs.np.storage_manager_server.property.PropertyFileOperation;
+import rs.np.storage_manager_server.repository.DBBroker;
+
+class ControllerTest {
+	private static Controller controller;
+	private DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	@BeforeAll
+	static void setUpBeforeClass() throws Exception {
+		List<String> params = Arrays.asList("jdbc:mysql://localhost:3306/np_test",
+				"root", "");
+		PropertyFileOperation.writeDataToPropertyFile(params, "config/dbconfig.properties");
+		controller = Controller.getInstance();
+	}
+
+	@AfterAll
+	static void tearDownAfterClass() throws Exception {
+		List<String> params = Arrays.asList("jdbc\\:mysql\\://127.0.0.1\\:3306/seminarskips",
+				"root", "");
+		PropertyFileOperation.writeDataToPropertyFile(params, "config/dbconfig.properties");
+		controller = null;
+	}
+
+	@BeforeEach
+	void setUp() throws Exception {
+	}
+
+	@AfterEach
+	void tearDown() throws Exception {
+	}
+	
+	@Test
+	@DisplayName("Login test")
+	void loginTest() {
+		User user = new User(1, "Milan", "Stankovic",
+				"stanmil_", "123abc");
+		user.setMode(WhereClauseMode.BY_USERNAME_PASSWORD);
+		try {
+			User dbUser = controller.login("stanmil_", "123abc");
+			assertEquals(dbUser, user);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Test has thrown an Exception");
+		}
+	}
+	
+	@Test
+	@DisplayName("User not found test")
+	void loginTestNotFound() {
+		//korisnik koji ne postoji u bazi
+		assertThrows(Exception.class,
+				()->controller.login("pera123", "abcdgef"));
+	}
+	
+	@Test
+	@DisplayName("Insert product test")
+	void insertProductTest() {
+		
+		truncateTable("artikal");
+		
+		Product p = new Product(1,"productName",
+				10.0, false, 20, ProductType.CarAccesory, new BigDecimal(1000.0));
+		try {
+			controller.insertProduct(p);
+			List<Product> dbProducts = controller.getAllProducts(p);
+			
+			assertTrue(dbProducts.size() == 1);
+			assertTrue(dbProducts.get(0).equals(p));
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Test has thrown an Exception");
+		} finally {
+			truncateTable("artikal");
+		}
+	}
+	
+	@Test
+	@DisplayName("Select all products")
+	void getAllProductsTest() {
+		
+		truncateTable("artikal");
+		
+		Product p1 = new Product(1,"table T1",
+				10.0, false, 20, ProductType.Furniture, new BigDecimal(1000.0));
+		Product p2 = new Product(2,"laptop",
+				10.0, true, 50, ProductType.Laptop, new BigDecimal(60000.0));
+		
+		try {
+			controller.insertProduct(p1);
+			controller.insertProduct(p2);
+			
+			List<Product> dbProducts = controller.getAllProducts();
+			assertTrue(dbProducts.size() == 2);
+			assertTrue(dbProducts.contains(p1));
+			assertTrue(dbProducts.contains(p2));
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Test has thrown an exception");
+		} finally {
+			truncateTable("artikal");
+		}
+	}
+
+	private void truncateTable(String tableName) {
+		if(tableName == null || tableName.isBlank()) {
+			throw new NullPointerException("Table name must not be empty");
+		}
+		String query1 = "SET FOREIGN_KEY_CHECKS=0;";
+		String query2 = "TRUNCATE "+ tableName + ";";
+		String query3 = "SET FOREIGN_KEY_CHECKS=1;";
+		
+		try {
+			Connection conn = DBBroker.getInstance().establishConnection();
+			Statement statement = conn.createStatement();
+			statement.executeUpdate(query1);
+			statement.executeUpdate(query2);
+			statement.executeUpdate(query3);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Test has thrown an exception");
+		}
+	}
+	
+	@Test
+	@DisplayName("Select all products by part of name")
+	void selectAllProductsParamTest() {
+		truncateTable("artikal");
+		
+		Product p1 = new Product(1,"table T1",
+				10.0, false, 20, ProductType.Furniture, new BigDecimal(1000.0));
+		Product p2 = new Product(2,"laptop",
+				10.0, true, 50, ProductType.Laptop, new BigDecimal(60000.0));
+		Product p3 = new Product(3,"table T2",
+				10.0, false, 20, ProductType.Furniture, new BigDecimal(1000.0));
+		Product p4 = new Product(4,"srafciger",
+				10.0, true, 50, ProductType.Tool, new BigDecimal(60000.0));
+		
+		Product info = new Product();
+		info.setProductName("table");
+		try {
+			controller.insertProduct(p1);
+			controller.insertProduct(p2);
+			controller.insertProduct(p3);
+			controller.insertProduct(p4);
+			List<Product> dbProducts =
+					controller.getAllProducts(info);
+			
+			assertTrue(dbProducts.size() == 2);
+			assertTrue(dbProducts.get(0).equals(p1) || dbProducts.get(1).equals(p1));
+			assertTrue(dbProducts.get(0).equals(p3) || dbProducts.get(1).equals(p3));
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Test has thrown an exception");
+		} finally {
+			truncateTable("artikal");
+		}
+	}
+	
+	
+	@Test
+	@DisplayName("Update product")
+	void updateProductTest() {
+		truncateTable("artikal");
+		
+		Product p1 = new Product(1,"table T1",
+				10.0, false, 20, ProductType.Furniture, new BigDecimal(1000.0));
+
+		try {
+			controller.insertProduct(p1);
+			p1 = controller.getAllProducts(p1).get(0);
+		Product p2 = new Product(1,"table T1",
+				10.0, true, 70, ProductType.Furniture, new BigDecimal(1000.0));
+		p2.setID(p1.getID());
+			controller.updateProduct(p2);
+			Product pUpdated = controller.getAllProducts(p2).get(0);
+			
+			assertEquals(pUpdated, p1);
+			assertEquals(70, pUpdated.getAmount());
+			assertTrue(pUpdated.getFragile());
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Test has thrown an exception");
+		} finally {
+			truncateTable("artikal");
+		}
+	}
+	
+	@Test
+	@DisplayName("Delete product")
+	void deleteProductTest() {
+		truncateTable("artikal");
+		
+		Product p1 = new Product(1,"table T1",
+				10.0, false, 20, ProductType.Furniture, new BigDecimal(1000.0));
+	
+		try {
+			controller.insertProduct(p1);
+			p1.setMode(WhereClauseMode.BY_NAME);
+			controller.deleteProduct(p1);
+			
+			assertTrue(controller.getAllProducts(p1).size() == 0);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Test has thrown an exception");
+		} finally {
+			truncateTable("artikal");
+		}
+	}
+	
+	@Test
+	@DisplayName("Select all partners")
+	void getAllPartnersNonParamTest() {
+		Partner partner1 = new Partner(6, "firmaPart1", "adresaPart1");
+		Partner partner2 = new Partner(7, "firmaPart2", "adresaPart2");
+		Partner partner3 = new Partner(8, "firmaPart3", "adresaPart3");
+		Partner partner4 = new Partner(9, "firmaPart4", "adresaPart4");
+		Partner partner5 = new Partner(10, "firmaPart5", "adresaPart5");
+	
+		try {
+			List<Partner> partners = controller.getAllPartners();
+			assertTrue(partners.size() == 5);
+			assertTrue(partners.contains(partner1));
+			assertTrue(partners.contains(partner2));
+			assertTrue(partners.contains(partner3));
+			assertTrue(partners.contains(partner4));
+			assertTrue(partners.contains(partner5));
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Test has thrown an exception");
+		}
+	}
+	
+	@Test
+	@DisplayName("Select all firms")
+	void getAllFirmsNonParamTest() {
+		Firm firm1 = new Firm(1, "firmName1", "firmAddress1");
+		Firm firm2 = new Firm(2, "firmName2", "firmAddress2");
+		Firm firm3 = new Firm(3, "firmName3", "firmAddress3");
+		
+		try {
+			List<Firm> firms = controller.getAllFirms();
+			assertTrue(firms.size() == 3);
+			assertTrue(firms.contains(firm1));
+			assertTrue(firms.contains(firm2));
+			assertTrue(firms.contains(firm3));
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Test has thrown an exception");
+		}
+	}
+	@Test
+	@DisplayName("Select all natural persons")
+	void getAllNaturalPersons() {
+		Buyer buyer1 = new Buyer();
+		buyer1.setID(1);
+		Buyer buyer2 = new Buyer();
+		buyer2.setID(2);
+		Buyer buyer3 = new Buyer();
+		buyer3.setID(3);
+		NaturalPerson np1 = new NaturalPerson(1, buyer1 , "firstName1", "lastName1");
+		NaturalPerson np2 = new NaturalPerson(2, buyer2 , "firstName2", "lastName2");
+		NaturalPerson np3 = new NaturalPerson(3, buyer3 , "firstName3", "lastName3");
+		
+		try {
+			List<NaturalPerson> naturalPersons = controller.getAllNaturalPersons();
+			assertEquals(3, naturalPersons.size());
+			assertTrue(naturalPersons.contains(np1));
+			assertTrue(naturalPersons.contains(np2));
+			assertTrue(naturalPersons.contains(np3));
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Test has thrown an exception");
+		}
+	}
+	
+	@Test
+	@DisplayName("Select all legal persons")
+	void getAllLegalPersonsNoParamsTest() {
+		Buyer buyer4 = new Buyer();
+		buyer4.setID(4);
+		Buyer buyer5 = new Buyer();
+		buyer5.setID(5);
+		try {
+			LegalPerson lp1 = new LegalPerson(4, buyer4, "firmName1", sdf.parse("2020-01-01"));
+			LegalPerson lp2 = new LegalPerson(6, buyer5, "firmName2", sdf.parse("2019-02-02"));
+			
+			List<LegalPerson> persons = controller.getAllLegalPersons();
+			
+			assertTrue(persons.size() == 2);
+			assertTrue(persons.contains(lp1));
+			assertTrue(persons.contains(lp2));
+			
+		} catch (ParseException e) {
+			e.printStackTrace();
+			fail("Test has thrown an exception");
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Test has thrown an exception");
+		} 
+	}
+	
+}
