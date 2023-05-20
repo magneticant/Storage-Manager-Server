@@ -4,14 +4,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
-import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
-import java.util.ResourceBundle.Control;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -20,15 +21,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import rs.np.storage_manager_common.domain.Firm;
-import rs.np.storage_manager_common.domain.Partner;
-import rs.np.storage_manager_common.domain.Product;
-import rs.np.storage_manager_common.domain.ProductType;
-import rs.np.storage_manager_common.domain.User;
-import rs.np.storage_manager_common.domain.WhereClauseMode;
-import rs.np.storage_manager_common.domain.abstraction.Buyer;
-import rs.np.storage_manager_common.domain.abstraction.implementation.LegalPerson;
-import rs.np.storage_manager_common.domain.abstraction.implementation.NaturalPerson;
+import com.mysql.cj.protocol.Resultset;
+
+import rs.np.storage_manager_common.domain.*;
+import rs.np.storage_manager_common.domain.abstraction.*;
+import rs.np.storage_manager_common.domain.abstraction.implementation.*;
+import rs.np.storage_manager_common.domain.utility.DateParser;
 import rs.np.storage_manager_server.property.PropertyFileOperation;
 import rs.np.storage_manager_server.repository.DBBroker;
 
@@ -330,5 +328,157 @@ class ControllerTest {
 			fail("Test has thrown an exception");
 		} 
 	}
+	
+	@Test
+	@DisplayName("Insert report test")
+	void insertReportTest() {
+		truncateTable("artikal");
+		truncateTable("stavkaizvestaja");
+		truncateTable("izvestaj");
+		
+		Product p1 = new Product(1,"productName1",10.0,false,10,ProductType.Art,new BigDecimal(10.0));
+		Product p2 = new Product(2, "productName2", 20.0, false,20, ProductType.CarAccesory, new BigDecimal(20.0));
+		try {
+			ReportItem ri1 = new ReportItem(1, sdf.parse("2022-03-03"), 20.0, p1);
+			ReportItem ri2 = new ReportItem(2, sdf.parse("2022-03-03"), 20.0, p2);
+			
+			List<ReportItem> items = Arrays.asList(ri1, ri2);
+			
+			Report report = new Report(sdf.parse("2022-03-03"), 90.0);
+			report.setReportItems(items);
+			controller.insertProduct(p1);
+			
+			controller.insertProduct(p2);
+			
+			controller.insertReport(report);
+			
+			List<Report> reports = controller.getAllReports(report);
+			assertEquals(reports.size(), 1);;
+			assertTrue(reports.get(0).equals(report));
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			fail("Test has thrown an exception");
+		} finally {
+			truncateTable("artikal");
+			truncateTable("stavkaizvestaja");
+			truncateTable("izvestaj");
+		}
+	}
+	
+	@Test
+	@DisplayName("Insert note test")
+	void insertNoteTest() {
+		truncateTable("artikal");
+		truncateTable("stavkaprijemnice");
+		truncateTable("prijemnica");
+		
+		Product p1 = new Product(1,"productName1",10.0,false,10,ProductType.Art,new BigDecimal(10.0));
+		Product p2 = new Product(2, "productName2", 20.0, false,20, ProductType.CarAccesory, new BigDecimal(20.0));
+		
+		Firm firm1 = new Firm(1, "firmName1", "firmAddress1");
+		Partner partner1 = new Partner(6, "firmaPart1", "adresaPart1");
+		GoodsReceivedNoteItem item1 = new GoodsReceivedNoteItem(1, 1, firm1, partner1, 2, p1);
+		GoodsReceivedNoteItem item2 = new GoodsReceivedNoteItem(2, 1, firm1, partner1, 5, p2);
+		
+		List<GoodsReceivedNoteItem> items = Arrays.asList(item1, item2);
+		try {
+			GoodsReceivedNote note = new GoodsReceivedNote(1, firm1, partner1, sdf.parse("2020-04-04"), sdf.parse("2025-01-04"), new BigDecimal(1200.0));
+			note.setItems(items);
+			controller.insertProduct(p1);
+			controller.insertProduct(p2);
+			controller.insertGoodsReceivedNote(note);
+			List<GoodsReceivedNote> notes = SelectQueries.selectAllNotes();
+			
+			List<GoodsReceivedNoteItem> dbItems = SelectQueries.selectAllNoteItems();
+			
+			
+			assertTrue(notes.size() == 1);
+			assertTrue(notes.get(0).equals(note));
+			assertTrue(dbItems.size() == 2);
+			assertTrue(dbItems.contains(item1));
+			assertTrue(dbItems.contains(item2));
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Test has thrown an exception");
+		} finally {
+			truncateTable("artikal");
+			truncateTable("stavkaprijemnice");
+			truncateTable("prijemnica");
+		}
+	}
+	
+	
+	private static class SelectQueries{
+	private static List<GoodsReceivedNote> selectAllNotes(){
+		Connection conn;
+		try {
+			conn = DBBroker.getInstance().establishConnection();
+			String query = "SELECT * FROM PRIJEMNICA;";
+			Statement statement = conn.createStatement();
+			
+			ResultSet rs = statement.executeQuery(query);
+			
+			List<GoodsReceivedNote> notes = new ArrayList<>();
+			while(rs.next()) {
+				Integer ID = rs.getInt("IDPrijemnice");
+				Integer IDFirme = rs.getInt("IDFirme");
+				Integer IDPartnera = rs.getInt("IDPartnera");
+				Date issueDate = DateParser.sqlDateToUtilDate(rs.getDate("datumIzdavanjaP"));
+				Date dueDate = DateParser.sqlDateToUtilDate(rs.getDate("datumValuteP"));
+				BigDecimal totalPrice = new BigDecimal(rs.getDouble("totalnaCena"));
+				
+				Firm firm = new Firm();
+				firm.setID(IDFirme);
+				Partner partner = new Partner();
+				partner.setID(IDPartnera);
+				GoodsReceivedNote note = new GoodsReceivedNote(ID, firm, partner, issueDate, dueDate, totalPrice);
+				notes.add(note);
+			}
+			
+			return notes;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	private static List<GoodsReceivedNoteItem> selectAllNoteItems(){
+		String query = "SELECT * FROM STAVKAPRIJEMNICE;";
+		try {
+			Connection conn = DBBroker.getInstance().establishConnection();
+			Statement statement = conn.createStatement();
+			ResultSet rs = statement.executeQuery(query);
+			
+			List<GoodsReceivedNoteItem> items = new ArrayList<>();
+			while(rs.next()) {
+				Integer ID = rs.getInt("IDStavkePrij");
+				Integer NoteID = rs.getInt("IDPrijemnice");
+				Integer FirmID = rs.getInt("IDFirme");
+				Integer PartnerID = rs.getInt("IDPartnera");
+				Integer amountAdded = rs.getInt("primljenaKolP");
+				Integer ProductID = rs.getInt("sifraArtikla");
+				
+				Firm firm = new Firm();
+				firm.setID(FirmID);
+				Partner partner = new Partner();
+				partner.setID(PartnerID);
+				Product product = new Product();
+				product.setID(ProductID);
+				
+				GoodsReceivedNoteItem item = new 
+						GoodsReceivedNoteItem(ID, NoteID, firm, partner, amountAdded, product);
+				items.add(item);
+			}
+			
+			return items;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	}
+	
 	
 }
