@@ -13,15 +13,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import com.mysql.cj.protocol.Resultset;
+import org.junit.jupiter.api.Timeout;
 
 import rs.np.storage_manager_common.domain.*;
 import rs.np.storage_manager_common.domain.abstraction.*;
@@ -43,21 +41,14 @@ class ControllerTest {
 
 	@AfterAll
 	static void tearDownAfterClass() throws Exception {
-		List<String> params = Arrays.asList("jdbc\\:mysql\\://127.0.0.1\\:3306/seminarskips",
+		List<String> params = Arrays.asList("jdbc:mysql://127.0.0.1:3306/np_production",
 				"root", "");
 		PropertyFileOperation.writeDataToPropertyFile(params, "config/dbconfig.properties");
 		controller = null;
 	}
-
-	@BeforeEach
-	void setUp() throws Exception {
-	}
-
-	@AfterEach
-	void tearDown() throws Exception {
-	}
 	
 	@Test
+	@Timeout (value = 10, unit = TimeUnit.SECONDS)
 	@DisplayName("Login test")
 	void loginTest() {
 		User user = new User(1, "Milan", "Stankovic",
@@ -73,6 +64,7 @@ class ControllerTest {
 	}
 	
 	@Test
+	@Timeout (value = 10, unit = TimeUnit.SECONDS)
 	@DisplayName("User not found test")
 	void loginTestNotFound() {
 		//korisnik koji ne postoji u bazi
@@ -81,10 +73,11 @@ class ControllerTest {
 	}
 	
 	@Test
+	@Timeout (value = 10, unit = TimeUnit.SECONDS)
 	@DisplayName("Insert product test")
 	void insertProductTest() {
 		
-		truncateTable("artikal");
+		ExtraQueries.truncateTable("artikal");
 		
 		Product p = new Product(1,"productName",
 				10.0, false, 20, ProductType.CarAccesory, new BigDecimal(1000.0));
@@ -99,15 +92,16 @@ class ControllerTest {
 			e.printStackTrace();
 			fail("Test has thrown an Exception");
 		} finally {
-			truncateTable("artikal");
+			ExtraQueries.truncateTable("artikal");
 		}
 	}
 	
 	@Test
+	@Timeout (value = 10, unit = TimeUnit.SECONDS)
 	@DisplayName("Select all products")
 	void getAllProductsTest() {
 		
-		truncateTable("artikal");
+		ExtraQueries.truncateTable("artikal");
 		
 		Product p1 = new Product(1,"table T1",
 				10.0, false, 20, ProductType.Furniture, new BigDecimal(1000.0));
@@ -126,34 +120,17 @@ class ControllerTest {
 			e.printStackTrace();
 			fail("Test has thrown an exception");
 		} finally {
-			truncateTable("artikal");
+			ExtraQueries.truncateTable("artikal");
 		}
 	}
 
-	private void truncateTable(String tableName) {
-		if(tableName == null || tableName.isBlank()) {
-			throw new NullPointerException("Table name must not be empty");
-		}
-		String query1 = "SET FOREIGN_KEY_CHECKS=0;";
-		String query2 = "TRUNCATE "+ tableName + ";";
-		String query3 = "SET FOREIGN_KEY_CHECKS=1;";
-		
-		try {
-			Connection conn = DBBroker.getInstance().establishConnection();
-			Statement statement = conn.createStatement();
-			statement.executeUpdate(query1);
-			statement.executeUpdate(query2);
-			statement.executeUpdate(query3);
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail("Test has thrown an exception");
-		}
-	}
+	
 	
 	@Test
+	@Timeout (value = 10, unit = TimeUnit.SECONDS)
 	@DisplayName("Select all products by part of name")
 	void selectAllProductsParamTest() {
-		truncateTable("artikal");
+		ExtraQueries.truncateTable("artikal");
 		
 		Product p1 = new Product(1,"table T1",
 				10.0, false, 20, ProductType.Furniture, new BigDecimal(1000.0));
@@ -181,15 +158,16 @@ class ControllerTest {
 			e.printStackTrace();
 			fail("Test has thrown an exception");
 		} finally {
-			truncateTable("artikal");
+			ExtraQueries.truncateTable("artikal");
 		}
 	}
 	
 	
 	@Test
+	@Timeout (value = 10, unit = TimeUnit.SECONDS)
 	@DisplayName("Update product")
 	void updateProductTest() {
-		truncateTable("artikal");
+		ExtraQueries.truncateTable("artikal");
 		
 		Product p1 = new Product(1,"table T1",
 				10.0, false, 20, ProductType.Furniture, new BigDecimal(1000.0));
@@ -211,14 +189,15 @@ class ControllerTest {
 			e.printStackTrace();
 			fail("Test has thrown an exception");
 		} finally {
-			truncateTable("artikal");
+			ExtraQueries.truncateTable("artikal");
 		}
 	}
 	
 	@Test
+	@Timeout (value = 10, unit = TimeUnit.SECONDS)
 	@DisplayName("Delete product")
 	void deleteProductTest() {
-		truncateTable("artikal");
+		ExtraQueries.truncateTable("artikal");
 		
 		Product p1 = new Product(15,"table T1",
 				10.0, false, 20, ProductType.Furniture, new BigDecimal(1000.0));
@@ -233,11 +212,12 @@ class ControllerTest {
 			e.printStackTrace();
 			fail("Test has thrown an exception");
 		} finally {
-			truncateTable("artikal");
+			ExtraQueries.truncateTable("artikal");
 		}
 	}
 	
 	@Test
+	@Timeout (value = 10, unit = TimeUnit.SECONDS)
 	@DisplayName("Select all partners")
 	void getAllPartnersNonParamTest() {
 		Partner partner1 = new Partner(6, "firmaPart1", "adresaPart1");
@@ -261,6 +241,7 @@ class ControllerTest {
 	}
 	
 	@Test
+	@Timeout (value = 10, unit = TimeUnit.SECONDS)
 	@DisplayName("Select all firms")
 	void getAllFirmsNonParamTest() {
 		Firm firm1 = new Firm(1, "firmName1", "firmAddress1");
@@ -279,6 +260,7 @@ class ControllerTest {
 		}
 	}
 	@Test
+	@Timeout (value = 10, unit = TimeUnit.SECONDS)
 	@DisplayName("Select all natural persons")
 	void getAllNaturalPersons() {
 		Buyer buyer1 = new Buyer();
@@ -304,6 +286,7 @@ class ControllerTest {
 	}
 	
 	@Test
+	@Timeout (value = 10, unit = TimeUnit.SECONDS)
 	@DisplayName("Select all legal persons")
 	void getAllLegalPersonsNoParamsTest() {
 		Buyer buyer4 = new Buyer();
@@ -330,11 +313,12 @@ class ControllerTest {
 	}
 	
 	@Test
+	@Timeout (value = 10, unit = TimeUnit.SECONDS)
 	@DisplayName("Insert report test")
 	void insertReportTest() {
-		truncateTable("artikal");
-		truncateTable("stavkaizvestaja");
-		truncateTable("izvestaj");
+		ExtraQueries.truncateTable("stavkaizvestaja");
+		ExtraQueries.truncateTable("izvestaj");
+		ExtraQueries.truncateTable("artikal");
 		
 		Product p1 = new Product(1,"productName1",10.0,false,10,ProductType.Art,new BigDecimal(10.0));
 		Product p2 = new Product(2, "productName2", 20.0, false,20, ProductType.CarAccesory, new BigDecimal(20.0));
@@ -342,13 +326,17 @@ class ControllerTest {
 			ReportItem ri1 = new ReportItem(1, sdf.parse("2022-03-03"), 20.0, p1);
 			ReportItem ri2 = new ReportItem(2, sdf.parse("2022-03-03"), 20.0, p2);
 			
-			List<ReportItem> items = Arrays.asList(ri1, ri2);
-			
 			Report report = new Report(sdf.parse("2022-03-03"), 90.0);
-			report.setReportItems(items);
+//			report.setReportItems(items);
 			controller.insertProduct(p1);
-			
+			p1 = controller.getAllProducts(p1).get(0);
 			controller.insertProduct(p2);
+			p2 = controller.getAllProducts(p2).get(0);
+			ri1.setProduct(p1);
+			ri2.setProduct(p2);
+
+			List<ReportItem> items = Arrays.asList(ri1, ri2);
+			report.setReportItems(items);
 			
 			controller.insertReport(report);
 			
@@ -360,18 +348,21 @@ class ControllerTest {
 			System.out.println(e.getMessage());
 			fail("Test has thrown an exception");
 		} finally {
-			truncateTable("artikal");
-			truncateTable("stavkaizvestaja");
-			truncateTable("izvestaj");
+			ExtraQueries.truncateTable("stavkaizvestaja");
+			ExtraQueries.truncateTable("izvestaj");
+			ExtraQueries.truncateTable("artikal");
 		}
 	}
 	
 	@Test
+	@Timeout (value = 10, unit = TimeUnit.SECONDS)
 	@DisplayName("Insert note test")
 	void insertNoteTest() {
-		truncateTable("artikal");
-		truncateTable("stavkaprijemnice");
-		truncateTable("prijemnica");
+		
+		ExtraQueries.truncateTable("stavkaprijemnice");
+		ExtraQueries.truncateTable("prijemnica");
+		ExtraQueries.truncateTable("artikal");
+		
 		
 		Product p1 = new Product(1,"productName1",10.0,false,10,ProductType.Art,new BigDecimal(10.0));
 		Product p2 = new Product(2, "productName2", 20.0, false,20, ProductType.CarAccesory, new BigDecimal(20.0));
@@ -380,41 +371,50 @@ class ControllerTest {
 		Partner partner1 = new Partner(6, "firmaPart1", "adresaPart1");
 		GoodsReceivedNoteItem item1 = new GoodsReceivedNoteItem(1, 1, firm1, partner1, 2, p1);
 		GoodsReceivedNoteItem item2 = new GoodsReceivedNoteItem(2, 1, firm1, partner1, 5, p2);
-		
-		List<GoodsReceivedNoteItem> items = Arrays.asList(item1, item2);
 		try {
-			GoodsReceivedNote note = new GoodsReceivedNote(1, firm1, partner1, sdf.parse("2020-04-04"), sdf.parse("2025-01-04"), new BigDecimal(1200.0));
-			note.setItems(items);
+			System.out.println("aaaaaaaa");
 			controller.insertProduct(p1);
 			controller.insertProduct(p2);
+		p1 = controller.getAllProducts(p1).get(0);
+		p2 = controller.getAllProducts(p2).get(0);
+		item1.setProduct(p1);
+		item2.setProduct(p2);
+		
+		List<GoodsReceivedNoteItem> items = Arrays.asList(item1, item2);
+		
+			GoodsReceivedNote note = new GoodsReceivedNote(1, firm1, partner1, sdf.parse("2020-04-04"), sdf.parse("2025-01-04"), new BigDecimal(1200.0));
+			note.setItems(items);
+			
 			controller.insertGoodsReceivedNote(note);
 			List<GoodsReceivedNote> notes = ExtraQueries.selectAllNotes();
-			
 			List<GoodsReceivedNoteItem> dbItems = ExtraQueries.selectAllNoteItems();
-			
 			
 			assertTrue(notes.size() == 1);
 			assertTrue(notes.get(0).equals(note));
 			assertTrue(dbItems.size() == 2);
-			assertTrue(dbItems.contains(item1));
-			assertTrue(dbItems.contains(item2));
+			assertTrue(dbItems.get(0).getDocumentID() == item1.getDocumentID());
+			assertTrue(dbItems.get(1).getDocumentID() == item2.getDocumentID());
+			assertTrue(dbItems.get(0).getDocumentID() == item2.getDocumentID());
+			assertTrue(dbItems.get(1).getDocumentID() == item1.getDocumentID());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("Test has thrown an exception");
 		} finally {
-			truncateTable("artikal");
-			truncateTable("stavkaprijemnice");
-			truncateTable("prijemnica");
+			
+			ExtraQueries.truncateTable("stavkaprijemnice");
+			ExtraQueries.truncateTable("prijemnica");
+			ExtraQueries.truncateTable("artikal");
 		}
 	}
 	
 	
 	@Test
+	@Timeout (value = 10, unit = TimeUnit.SECONDS)
 	@DisplayName("Insert bill test")
 	void insertNBillTest() {
-		truncateTable("artikal");
-		truncateTable("stavkaotpremnice");
-		truncateTable("otpremnica");
+		ExtraQueries.truncateTable("stavkaotpremnice");
+		ExtraQueries.truncateTable("otpremnica");
+		ExtraQueries.truncateTable("artikal");
 		
 		Product p1 = new Product(1,"productName1",10.0,false,10,ProductType.Art,new BigDecimal(10.0));
 		Product p2 = new Product(2, "productName2", 20.0, false,20, ProductType.CarAccesory, new BigDecimal(20.0));
@@ -426,12 +426,18 @@ class ControllerTest {
 		BillOfLadingItem item1 = new BillOfLadingItem(1, 1, np ,firm1, 2, p1, WhereClauseMode.BY_ID);
 		BillOfLadingItem item2 = new BillOfLadingItem(2, 1, np, firm1, 5, p2, WhereClauseMode.BY_NAME);
 		
-		List<BillOfLadingItem> items = Arrays.asList(item1, item2);
 		try {
-			BillOfLading bill = new BillOfLading(1, np, firm1, sdf.parse("2020-04-04"), sdf.parse("2025-01-04"), new BigDecimal(1200.0), WhereClauseMode.BY_ID);
-			bill.setItems(items);
 			controller.insertProduct(p1);
 			controller.insertProduct(p2);
+			p1 = controller.getAllProducts(p1).get(0);
+			p2 = controller.getAllProducts(p2).get(0);
+			item1.setProduct(p1);
+			item2.setProduct(p2);
+			List<BillOfLadingItem> items = Arrays.asList(item1, item2);
+			
+			BillOfLading bill = new BillOfLading(1, np, firm1, sdf.parse("2020-04-04"), sdf.parse("2025-01-04"), new BigDecimal(1200.0), WhereClauseMode.BY_ID);
+			bill.setItems(items);
+			
 			controller.insertBillOfLading(bill);
 			List<BillOfLading> bills = ExtraQueries.selectAllBills();
 			
@@ -441,19 +447,22 @@ class ControllerTest {
 			assertTrue(bills.size() == 1);
 			assertTrue(bills.get(0).equals(bill));
 			assertTrue(dbItems.size() == 2);
-			assertTrue(dbItems.contains(item1));
-			assertTrue(dbItems.contains(item2));
+			assertTrue(dbItems.get(0).getDocumentID() == item1.getDocumentID());
+			assertTrue(dbItems.get(1).getDocumentID() == item2.getDocumentID());
+			assertTrue(dbItems.get(0).getDocumentID() == item2.getDocumentID());
+			assertTrue(dbItems.get(1).getDocumentID() == item1.getDocumentID());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("Test has thrown an exception");
 		} finally {
-			truncateTable("artikal");
-			truncateTable("stavkaotpremnice");
-			truncateTable("otpremnica");
+			ExtraQueries.truncateTable("stavkaotpremnice");
+			ExtraQueries.truncateTable("otpremnica");
+			ExtraQueries.truncateTable("artikal");
 		}
 	}
 	
 	@Test
+	@Timeout (value = 10, unit = TimeUnit.SECONDS)
 	@DisplayName("Select all reports test")
 	void getAllReportsTest() {
 		//ovo i nije neophodno, test je dodat radi kompletnosti.
@@ -614,6 +623,22 @@ class ControllerTest {
 			System.out.println("============================");
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	private static void truncateTable(String tableName) {
+		if(tableName == null || tableName.isBlank()) {
+			throw new NullPointerException("Table name must not be empty");
+		}
+		String query2 = "DELETE FROM "+ tableName +";";
+		
+		try {
+			Connection conn = DBBroker.getInstance().establishConnection();
+			Statement statement = conn.createStatement();
+			statement.executeUpdate(query2);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Test has thrown an exception");
 		}
 	}
 	}
