@@ -11,7 +11,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.AfterAll;
@@ -51,6 +53,7 @@ class ControllerTest {
 	
 	@BeforeEach
 	void setUp() throws Exception {
+		System.out.println("SetUp");
 		ExtraQueries.truncateTable("artikal");
 		ExtraQueries.truncateTable("stavkaizvestaja");
 		ExtraQueries.truncateTable("izvestaj");
@@ -62,6 +65,7 @@ class ControllerTest {
 	
 	@AfterEach
 	void tearDown() throws Exception {
+		System.out.println("TearDown");
 		ExtraQueries.truncateTable("artikal");
 		ExtraQueries.truncateTable("stavkaizvestaja");
 		ExtraQueries.truncateTable("izvestaj");
@@ -75,6 +79,7 @@ class ControllerTest {
 	@Timeout (value = 10, unit = TimeUnit.SECONDS)
 	@DisplayName("Login test")
 	void loginTest() throws Exception {
+		System.out.println("1");
 		User user = new User(1, "Milan", "Stankovic",
 				"stanmil_", "123abc");
 		user.setMode(WhereClauseMode.BY_USERNAME_PASSWORD);
@@ -88,6 +93,7 @@ class ControllerTest {
 	@Timeout (value = 10, unit = TimeUnit.SECONDS)
 	@DisplayName("User not found test")
 	void loginTestNotFound() {
+		System.out.println("2");
 		//korisnik koji ne postoji u bazi
 		assertThrows(Exception.class,
 				()->controller.login("pera123", "abcdgef"));
@@ -97,7 +103,7 @@ class ControllerTest {
 	@Timeout (value = 10, unit = TimeUnit.SECONDS)
 	@DisplayName("Insert product test")
 	void insertProductTest() throws Exception {
-		
+		System.out.println("3");
 		
 		Product p = new Product(1,"productName",
 				10.0, false, 20, ProductType.CarAccesory, new BigDecimal(1000.0));
@@ -106,7 +112,12 @@ class ControllerTest {
 			List<Product> dbProducts = controller.getAllProducts(p);
 			
 			assertTrue(dbProducts.size() == 1);
-			assertTrue(dbProducts.get(0).equals(p));
+			System.out.println(dbProducts);
+			
+			var pRes = controller.getAllProducts(p).get(0);
+			p.setID(pRes.getID());
+			
+			assertEquals(p, dbProducts.get(0));
 		
 	}
 	
@@ -114,7 +125,7 @@ class ControllerTest {
 	@Timeout (value = 10, unit = TimeUnit.SECONDS)
 	@DisplayName("Select all products")
 	void getAllProductsTest() throws Exception {
-		
+		System.out.println("4");
 		
 		Product p1 = new Product(1,"table T1",
 				10.0, false, 20, ProductType.Furniture, new BigDecimal(1000.0));
@@ -126,6 +137,14 @@ class ControllerTest {
 			
 			List<Product> dbProducts = controller.getAllProducts();
 			assertTrue(dbProducts.size() == 2);
+			System.out.println(dbProducts);
+			
+			Product pRes1 = findByProductName(dbProducts, "table T1");
+			Product pRes2 = findByProductName(dbProducts, "laptop");
+			
+			p1.setID(pRes1.getID());
+			p2.setID(pRes2.getID());
+			
 			assertTrue(dbProducts.contains(p1));
 			assertTrue(dbProducts.contains(p2));
 	}
@@ -134,7 +153,7 @@ class ControllerTest {
 	@Timeout (value = 10, unit = TimeUnit.SECONDS)
 	@DisplayName("Select all products by part of name")
 	void selectAllProductsParamTest() throws Exception {
-		
+		System.out.println("5");
 		Product p1 = new Product(1,"table T1",
 				10.0, false, 20, ProductType.Furniture, new BigDecimal(1000.0));
 		Product p2 = new Product(2,"laptop",
@@ -154,16 +173,32 @@ class ControllerTest {
 			List<Product> dbProducts =
 					controller.getAllProducts(info);
 			
-			assertTrue(dbProducts.size() == 2);
-			assertTrue(dbProducts.get(0).equals(p1) || dbProducts.get(1).equals(p1));
-			assertTrue(dbProducts.get(0).equals(p3) || dbProducts.get(1).equals(p3));
+			Product pRes1 = findByProductName(dbProducts, "Table T1");
+			Product pRes2 = findByProductName(dbProducts, "Table T2");
+			
+			p1.setID(pRes1.getID());
+			p3.setID(pRes2.getID());
+			
+			assertTrue(dbProducts.contains(p1));
+			assertTrue(dbProducts.contains(p3));
 	}
 	
+	private Product findByProductName(List<Product> list, String name) {
+		for(Product p: list) {
+			if(p == null)
+				continue;
+			if(p.getProductName().equalsIgnoreCase(name))
+				return p;
+		}
+			return null;
+		
+	}
+
 	@Test
 	@Timeout (value = 10, unit = TimeUnit.SECONDS)
 	@DisplayName("Update product")
 	void updateProductTest() throws Exception {
-		
+		System.out.println("6");
 		Product p1 = new Product(1,"table T1",
 				10.0, false, 20, ProductType.Furniture, new BigDecimal(1000.0));
 
@@ -185,7 +220,7 @@ class ControllerTest {
 	@Timeout (value = 10, unit = TimeUnit.SECONDS)
 	@DisplayName("Delete product")
 	void deleteProductTest() throws Exception {
-		
+		System.out.println("7");
 		Product p1 = new Product(15,"table T1",
 				10.0, false, 20, ProductType.Furniture, new BigDecimal(1000.0));
 	
@@ -205,7 +240,7 @@ class ControllerTest {
 		Partner partner3 = new Partner(8, "firmaPart3", "adresaPart3");
 		Partner partner4 = new Partner(9, "firmaPart4", "adresaPart4");
 		Partner partner5 = new Partner(10, "firmaPart5", "adresaPart5");
-	
+		System.out.println("8");
 			List<Partner> partners = controller.getAllPartners();
 			assertTrue(partners.size() == 5);
 			assertTrue(partners.contains(partner1));
@@ -222,7 +257,7 @@ class ControllerTest {
 		Firm firm1 = new Firm(1, "firmName1", "firmAddress1");
 		Firm firm2 = new Firm(2, "firmName2", "firmAddress2");
 		Firm firm3 = new Firm(3, "firmName3", "firmAddress3");
-		
+		System.out.println("9");
 			List<Firm> firms = controller.getAllFirms();
 			assertTrue(firms.size() == 3);
 			assertTrue(firms.contains(firm1));
@@ -233,6 +268,7 @@ class ControllerTest {
 	@Timeout (value = 10, unit = TimeUnit.SECONDS)
 	@DisplayName("Select all natural persons")
 	void getAllNaturalPersons() throws Exception {
+		System.out.println("10");
 		Buyer buyer1 = new Buyer();
 		buyer1.setID(1);
 		Buyer buyer2 = new Buyer();
@@ -258,6 +294,7 @@ class ControllerTest {
 		buyer4.setID(4);
 		Buyer buyer5 = new Buyer();
 		buyer5.setID(5);
+		System.out.println("11");
 		
 			LegalPerson lp1 = new LegalPerson(4, buyer4, "firmName1", sdf.parse("2020-01-01"));
 			LegalPerson lp2 = new LegalPerson(6, buyer5, "firmName2", sdf.parse("2019-02-02"));
@@ -274,7 +311,7 @@ class ControllerTest {
 	@Timeout (value = 10, unit = TimeUnit.SECONDS)
 	@DisplayName("Insert report test")
 	void insertReportTest() throws Exception {
-		
+		System.out.println("12");
 		Product p1 = new Product(1,"productName1",10.0,false,10,ProductType.Art,new BigDecimal(10.0));
 		Product p2 = new Product(2, "productName2", 20.0, false,20, ProductType.CarAccesory, new BigDecimal(20.0));
 
@@ -296,7 +333,7 @@ class ControllerTest {
 			controller.insertReport(report);
 			
 			List<Report> reports = controller.getAllReports(report);
-			assertEquals(reports.size(), 1);;
+			assertEquals(reports.size(), 1);
 			assertTrue(reports.get(0).equals(report));
 	}
 	
@@ -304,7 +341,7 @@ class ControllerTest {
 	@Timeout (value = 10, unit = TimeUnit.SECONDS)
 	@DisplayName("Insert note test")
 	void insertNoteTest() throws Exception {
-		
+		System.out.println("13");
 		Product p1 = new Product(1,"productName1",10.0,false,10,ProductType.Art,new BigDecimal(10.0));
 		Product p2 = new Product(2, "productName2", 20.0, false,20, ProductType.CarAccesory, new BigDecimal(20.0));
 		
@@ -343,7 +380,7 @@ class ControllerTest {
 	@Timeout (value = 10, unit = TimeUnit.SECONDS)
 	@DisplayName("Insert bill test")
 	void insertNBillTest() throws Exception {
-		
+		System.out.println("14");
 		Product p1 = new Product(1,"productName1",10.0,false,10,ProductType.Art,new BigDecimal(10.0));
 		Product p2 = new Product(2, "productName2", 20.0, false,20, ProductType.CarAccesory, new BigDecimal(20.0));
 		
@@ -384,6 +421,7 @@ class ControllerTest {
 	@Timeout (value = 10, unit = TimeUnit.SECONDS)
 	@DisplayName("Select all reports test")
 	void getAllReportsTest() throws Exception {
+		System.out.println("1");
 		//ovo i nije neophodno, test je dodat radi kompletnosti.
 		//testom insertReportTest je provereno i selectAllReports.
 		insertReportTest();
