@@ -30,7 +30,8 @@ public class SelectAllUsersParam extends GenericSystemOperation{
         }
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     protected void executeOperation(Object parameter) throws Exception {
         users = repository.selectAll((User)parameter);
     }

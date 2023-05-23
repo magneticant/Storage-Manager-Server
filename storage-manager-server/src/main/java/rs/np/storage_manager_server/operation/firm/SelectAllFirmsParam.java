@@ -22,7 +22,8 @@ public class SelectAllFirmsParam extends GenericSystemOperation {
     @Override
     protected void preconditions(Object parameter) throws Exception { }
     
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     protected void executeOperation(Object parameter) throws Exception {
         firms = repository.selectAll((Firm)parameter);
     }

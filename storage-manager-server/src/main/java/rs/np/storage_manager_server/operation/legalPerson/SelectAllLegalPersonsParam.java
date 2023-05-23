@@ -25,7 +25,8 @@ public class SelectAllLegalPersonsParam extends GenericSystemOperation {
     protected void preconditions(Object parameter) throws Exception {
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     protected void executeOperation(Object parameter) throws Exception {
         legalPersons = repository.selectAll((LegalPerson)parameter);
     }

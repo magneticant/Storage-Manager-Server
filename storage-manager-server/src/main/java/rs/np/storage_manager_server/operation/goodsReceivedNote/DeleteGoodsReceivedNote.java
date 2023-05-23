@@ -22,7 +22,8 @@ public class DeleteGoodsReceivedNote extends GenericSystemOperation{
         }
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     protected void executeOperation(Object parameter) throws Exception {
         repository.delete((GoodsReceivedNote)parameter);
     }

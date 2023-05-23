@@ -528,6 +528,7 @@ class ControllerTest {
 		return null;
 	}
 	
+	@SuppressWarnings("unused")
 	private static void insertReportItem(ReportItem item) {
 		String query = "INSERT INTO " + item.getTableName() +
                 " (" + item.getColumnsWithoutID() + ") " +

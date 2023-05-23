@@ -20,12 +20,14 @@ public abstract class GenericSystemOperation {
 	 * protected scope (zasticeni) atribut Repository koji je final i predstavlja komponentu
 	 * dependency injection-a (preko konstruktora) za rad sa apstraktnim repozitorijumom
 	 */
-    protected final Repository repository;
+    @SuppressWarnings("rawtypes")
+	protected final Repository repository;
     /**
      * neparametrizovani konstruktor klase. Postavlja dependency repozitorijuma 
      * (vidi: {@link rs.np.storage_manager_server.repository.Repository} )
      */
-    public GenericSystemOperation() {
+    @SuppressWarnings("rawtypes")
+	public GenericSystemOperation() {
         this.repository = (Repository) new AbstractDBRepository();
     }
     /**
@@ -60,7 +62,8 @@ public abstract class GenericSystemOperation {
      * privatna metoda startTransaction, koja zapocinje transakciju uspostavljanjem veze sa bazom podataka
      * @throws Exception u slucaju da nije moguce uspostaviti vezu sa bazom podataka
      */
-    private void startTransaction() throws Exception {
+    @SuppressWarnings("rawtypes")
+	private void startTransaction() throws Exception {
         ((DBRepository)repository).connect();
     }
     /**
@@ -74,7 +77,8 @@ public abstract class GenericSystemOperation {
      * privatna metoda commit koja commituje operaciju
      * @throws Exception u slucaju greske prilikom commit-ovanja (izvrsen rollback)
      */
-    private void commit() throws Exception {
+    @SuppressWarnings("rawtypes")
+	private void commit() throws Exception {
         ((DBRepository)repository).commit();
     }
     /**
@@ -82,7 +86,8 @@ public abstract class GenericSystemOperation {
      * 
      * @throws Exception u slucaju greske prilikom rollback-ovanja
      */
-    private void rollback() throws Exception {
+    @SuppressWarnings("rawtypes")
+	private void rollback() throws Exception {
         ((DBRepository)repository).rollback();
     }
     /**
@@ -90,7 +95,8 @@ public abstract class GenericSystemOperation {
      * 
      * @throws Exception u slucaju greske prilikom disconnect-ovanja sa baze podataka
      */
-    private void disconnect() throws Exception {
+    @SuppressWarnings("rawtypes")
+	private void disconnect() throws Exception {
             ((DBRepository)repository).disconnect();
     }
 }

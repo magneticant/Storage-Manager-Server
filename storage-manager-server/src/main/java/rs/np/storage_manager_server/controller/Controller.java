@@ -21,7 +21,7 @@ import rs.np.storage_manager_server.operation.user.SelectAllUsersParam;
 import rs.np.storage_manager_server.repository.DBRepository;
 import rs.np.storage_manager_server.repository.Repository;
 import rs.np.storage_manager_server.repository.implementation.concrete.*;
-import rs.np.storage_manager_server.operation.user.*;
+
 /**
  * Kontroler klasa projekta. Kontroler prima od ClientThread klase zahteve klijenata i salje
  * (u najvecem broju slucajeva) GenericSystemOperation-u na perzistiranje.
@@ -177,7 +177,8 @@ public class Controller {
      * @param reportForInsertion tipa {@link Report}, izvestaj sa stavkama za unos u bazu podataka.
      * @throws Exception u slucaju greske prilikom transakcije (izvrsen rollback)
      */
-    public void insertReport(Report reportForInsertion) throws Exception {
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	public void insertReport(Report reportForInsertion) throws Exception {
         ((DBRepositoryReport)repositoryReport).connect();
         try{ 
             repositoryReport.insert(reportForInsertion);
@@ -223,7 +224,8 @@ public class Controller {
      * @param noteForInsert tipa {@link GoodsReceivedNote}, prijemnica sa stavkama za unos u bazu podataka.
      * @throws Exception u slucaju greske prilikom transakcije (izvrsen rollback)
      */
-    public void insertGoodsReceivedNote(GoodsReceivedNote noteForInsert) throws Exception {
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	public void insertGoodsReceivedNote(GoodsReceivedNote noteForInsert) throws Exception {
         List<? extends AbstractDocumentItem> items = noteForInsert.getItems();
         alterProductStock(items);
         
@@ -270,7 +272,8 @@ public class Controller {
      * @param billForInsert tipa {@link BillOfLading}, otpremnica za unos u bazu podataka
      * @throws Exception u slucaju greske prilikom transakcije (izvrsen rollback)
      */
-    public void insertBillOfLading(BillOfLading billForInsert) throws Exception {
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	public void insertBillOfLading(BillOfLading billForInsert) throws Exception {
         List<? extends AbstractDocumentItem> items = billForInsert.getItems();
         alterProductStock(items);
         

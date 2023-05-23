@@ -22,7 +22,8 @@ public class SelectAllUsers extends GenericSystemOperation{
     @Override
     protected void preconditions(Object parameter) throws Exception {}
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     protected void executeOperation(Object parameter) throws Exception {
         users = repository.selectAll();
     }

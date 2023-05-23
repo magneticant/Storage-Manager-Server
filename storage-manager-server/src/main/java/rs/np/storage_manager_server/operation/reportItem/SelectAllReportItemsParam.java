@@ -36,7 +36,8 @@ public class SelectAllReportItemsParam extends GenericSystemOperation {
      * parametrizovano, a zatim se vracaju i svi proizvodi iz baze, pa se svakoj stavci
      * izvestaja dodeljuje adekvatan proizvod po ID-ju preko privatne metode assignProductToReportItem
      */
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     protected void executeOperation(Object parameter) throws Exception {
         items = repository.selectAll((ReportItem)parameter);
         List<Product> products;

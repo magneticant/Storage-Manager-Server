@@ -7,10 +7,6 @@ import rs.np.storage_manager_common.connection.abstraction.JSONImpl.ReceiverJSON
 import rs.np.storage_manager_common.connection.abstraction.JSONImpl.RequestJSON;
 import rs.np.storage_manager_common.connection.abstraction.JSONImpl.ResponseJSON;
 import rs.np.storage_manager_common.connection.abstraction.JSONImpl.SenderJSON;
-import rs.np.storage_manager_common.connection.abstraction.objectImpl.ReceiverObject;
-import rs.np.storage_manager_common.connection.abstraction.objectImpl.RequestObject;
-import rs.np.storage_manager_common.connection.abstraction.objectImpl.ResponseObject;
-import rs.np.storage_manager_common.connection.abstraction.objectImpl.SenderObject;
 import rs.np.storage_manager_common.domain.*;
 import rs.np.storage_manager_common.domain.abstraction.implementation.*;
 import rs.np.storage_manager_server.controller.Controller;

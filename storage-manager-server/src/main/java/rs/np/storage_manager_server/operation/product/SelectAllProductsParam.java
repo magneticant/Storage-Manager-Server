@@ -26,7 +26,8 @@ public class SelectAllProductsParam extends GenericSystemOperation{
         }
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     protected void executeOperation(Object parameter) throws Exception {
         products = repository.selectAll((Product)parameter);
     }

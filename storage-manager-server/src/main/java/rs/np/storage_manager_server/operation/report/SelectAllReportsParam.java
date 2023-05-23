@@ -29,7 +29,8 @@ public class SelectAllReportsParam extends GenericSystemOperation {
         }
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     protected void executeOperation(Object parameter) throws Exception {
         reports = repository.selectAll((Report)parameter);
         List<ReportItem> items;

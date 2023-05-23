@@ -22,7 +22,8 @@ public class InsertGoodsReceivedNote extends GenericSystemOperation{
         }
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     protected void executeOperation(Object parameter) throws Exception {
         repository.insert((GoodsReceivedNote)parameter);
     }

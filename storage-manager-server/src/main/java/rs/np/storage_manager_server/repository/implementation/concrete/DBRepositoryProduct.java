@@ -8,7 +8,6 @@ import rs.np.storage_manager_server.repository.DBBroker;
 import rs.np.storage_manager_server.repository.DBRepository;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -99,7 +98,7 @@ public class DBRepositoryProduct implements DBRepository<Product>{
                              " WHERE " + parameter.getWhereCondition(parameter.getMode()) + ";";
            
             System.out.println(query);
-            List<Product> products = new ArrayList<>();
+//            List<Product> products = new ArrayList<>();
             conn = DBBroker.getInstance().establishConnection();
             Statement st = conn.createStatement();
             System.out.println("STATEMENT MADE");
