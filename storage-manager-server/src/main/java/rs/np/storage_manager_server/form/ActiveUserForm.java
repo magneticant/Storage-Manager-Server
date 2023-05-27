@@ -15,6 +15,10 @@ import rs.np.storage_manager_server.form.model.UserTableModel;
  */
 public class ActiveUserForm extends javax.swing.JDialog {
 	/**
+	 * privatni staticki atribut, serijski broj generisan na zahtev Serializable interfejsa.
+	 */
+	private static final long serialVersionUID = -2934448113646353418L;
+	/**
 	 * privatni atribut lista korisnika
 	 */
 private List<User> users;

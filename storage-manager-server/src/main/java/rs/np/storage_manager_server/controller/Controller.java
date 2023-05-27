@@ -135,7 +135,7 @@ public class Controller {
      * @throws Exception u slucaju greske prilikom transakcije (izvrsen rollback)
      */
     public List<Product> getAllProducts(Product product) throws Exception {
-        product.setMode(WhereClauseMode.BY_NAME);
+//        product.setMode(WhereClauseMode.BY_NAME);
         GenericSystemOperation SO = new SelectAllProductsParam();
         SO.execute(product);
         return ((SelectAllProductsParam)SO).getProducts();

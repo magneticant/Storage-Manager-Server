@@ -4,10 +4,9 @@ package rs.np.storage_manager_server.operation.reportItem;
 import java.util.ArrayList;
 import java.util.List;
 
-import rs.np.storage_manager_common.domain.Product;
 import rs.np.storage_manager_common.domain.ReportItem;
-import rs.np.storage_manager_server.controller.Controller;
 import rs.np.storage_manager_server.operation.GenericSystemOperation;
+import rs.np.storage_manager_server.repository.implementation.concrete.DBRepositoryReportItem;
 /**
  * Klasa za prikupljanje podataka o svim stavkama izvestaja, parametrizovano, po datumu. Nasledjuje klasu 
  * {@link rs.np.storage_manager_server.operation.GenericSystemOperation}.
@@ -36,37 +35,16 @@ public class SelectAllReportItemsParam extends GenericSystemOperation {
      * parametrizovano, a zatim se vracaju i svi proizvodi iz baze, pa se svakoj stavci
      * izvestaja dodeljuje adekvatan proizvod po ID-ju preko privatne metode assignProductToReportItem
      */
-    @SuppressWarnings("unchecked")
 	@Override
     protected void executeOperation(Object parameter) throws Exception {
-        items = repository.selectAll((ReportItem)parameter);
-        List<Product> products;
-        
-        products = Controller.getInstance().getAllProducts();
-        assignProductToReportItem(products);
+        items = new DBRepositoryReportItem().selectAll();
     }
-    /**
+    
+	/**
      * get metoda za stavke izvestaja 
      * @return items, kao lista stavki izvestaja ({@link ReportItem}, {@link ArrayList})
      */
     public List<ReportItem> getItems() {
         return items;
-    }
-    /**
-     * privatna metoda koja dodeljuje svaki proizvod odgovarajucoj stavci izvestaja
-     * @param items tipa lista proizvoda. Lista proizvoda koje treba dodeliti
-     * stavkama izvestaja
-     */
-    private void assignProductToReportItem(List<Product> products) {
-        for(ReportItem item : items){
-            for(Product product: products){
-                if(product == null || item.getProduct() == null)
-                    continue;
-                if(product.getID() == item.getProduct().getID()){
-                    item.setProduct(product);
-                }
-            }
-            System.out.println("REPORT ITEMS: " + item);
-        }
     }
 }

@@ -16,8 +16,12 @@ import rs.np.storage_manager_server.property.PropertyFileOperation;
  * @author Milan
  */
 public class SettingsForm extends javax.swing.JDialog {
-
     /**
+	 * privatni staticki atribut, serijski broj generisan na zahtev Serializable interfejsa.
+	 */
+	private static final long serialVersionUID = -7331801062077010065L;
+
+	/**
      * parametrizovani konstruktor. Poziva super konstruktor, initComponents,
      * postavlja lokaciju na centar ekrana i naslov na "Setting change form".
      * Na kraju poziva privatnu metodu forme prepareForm

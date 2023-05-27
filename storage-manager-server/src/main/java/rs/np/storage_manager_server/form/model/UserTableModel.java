@@ -13,6 +13,10 @@ import rs.np.storage_manager_common.domain.User;
  */
 public class UserTableModel extends AbstractTableModel{
 	/**
+	 * privatni staticki atribut, serijski broj generisan na zahtev Serializable interfejsa.
+	 */
+	private static final long serialVersionUID = 9029828148687578883L;
+	/**
 	 * package scope niz naziva kolona tabele (columnNames) kao String[]
 	 */
 	String[] columnNames = new String[]{"ID","name","last name","username", "password"};

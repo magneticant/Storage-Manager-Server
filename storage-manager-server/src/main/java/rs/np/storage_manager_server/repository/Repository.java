@@ -37,8 +37,8 @@ public interface Repository<T> {
     void delete(T parameter) throws Exception;
     /**
      * Select operacija za sve objekte u bazi (deprecated)
-     * 
      * @return lista svih domenskih objekata iz baze, kao {@link List}
+     * @throws Exception u slucaju greske pri uspostavljanju veze sa SQL serverom
      */
-    List<T> selectAll();
+    List<T> selectAll() throws Exception;
 }
