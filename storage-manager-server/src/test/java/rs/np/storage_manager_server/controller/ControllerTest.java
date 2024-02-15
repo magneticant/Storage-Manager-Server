@@ -430,7 +430,7 @@ class ControllerTest {
 		Connection conn;
 		try {
 			conn = DBBroker.getInstance().establishConnection();
-			String query = "SELECT * FROM PRIJEMNICA;";
+			String query = "SELECT * FROM prijemnica;";
 			Statement statement = conn.createStatement();
 			
 			ResultSet rs = statement.executeQuery(query);
@@ -461,7 +461,7 @@ class ControllerTest {
 	}
 	
 	private static List<GoodsReceivedNoteItem> selectAllNoteItems(){
-		String query = "SELECT * FROM STAVKAPRIJEMNICE;";
+		String query = "SELECT * FROM stavkaprijemnice;";
 		try {
 			Connection conn = DBBroker.getInstance().establishConnection();
 			Statement statement = conn.createStatement();
@@ -498,7 +498,7 @@ class ControllerTest {
 		Connection conn;
 		try {
 			conn = DBBroker.getInstance().establishConnection();
-			String query = "SELECT * FROM OTPREMNICA;";
+			String query = "SELECT * FROM otpremnica;";
 			Statement statement = conn.createStatement();
 			
 			ResultSet rs = statement.executeQuery(query);
@@ -530,7 +530,7 @@ class ControllerTest {
 	}
 	
 	private static List<BillOfLadingItem> selectAllBillItems(){
-		String query = "SELECT * FROM STAVKAOTPREMNICE;";
+		String query = "SELECT * FROM stavkaotpremnice;";
 		try {
 			Connection conn = DBBroker.getInstance().establishConnection();
 			Statement statement = conn.createStatement();
